@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PashuaWrapper", "PashuaWrapper\PashuaWrapper.csproj", "{06D7E6E9-BF4D-4F17-A019-C3DDCC160C0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runner", "Runner\Runner.csproj", "{8A37F252-BB4C-4C67-9C93-53CB2B69441C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,8 +15,12 @@ Global
 		{06D7E6E9-BF4D-4F17-A019-C3DDCC160C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06D7E6E9-BF4D-4F17-A019-C3DDCC160C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06D7E6E9-BF4D-4F17-A019-C3DDCC160C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A37F252-BB4C-4C67-9C93-53CB2B69441C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A37F252-BB4C-4C67-9C93-53CB2B69441C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A37F252-BB4C-4C67-9C93-53CB2B69441C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A37F252-BB4C-4C67-9C93-53CB2B69441C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = PashuaWrapper\PashuaWrapper.csproj
+		StartupItem = Runner\Runner.csproj
 	EndGlobalSection
 EndGlobal
