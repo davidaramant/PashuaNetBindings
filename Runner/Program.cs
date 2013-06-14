@@ -7,7 +7,11 @@ namespace Runner
 	{
 		public static void Main (string[] args)
 		{
-			PashuaDialog.Create( title:"Hello" ).Show();
+			PashuaDialog.
+				Create( title:"Hello" ).
+				WithButton( id:"one", label:"Another option" ).
+				WithDefaultButton( label: "Yup" ).
+				Show();
 		}
 	}
 }
