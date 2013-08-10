@@ -68,6 +68,108 @@ namespace PashuaWrapper.Backend {
 			return this;
 		}
 
+		public DialogBuilder WithCancelButton( 
+		                                string id = "cancel",
+		                                string label = null, 
+		                                bool? enabled = null, 
+		                                string tooltip = null ) {
+			_script.AddFormat( "{0}.type = cancelbutton", id );
+			_script.AddFormat( "{0}.label = {1}", id, label );
+			if( enabled.HasValue && !enabled.Value ) {
+				_script.AddFormat( "{0}.disabled = 1", id );
+			}
+			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
+				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
+			}
+
+			return this;
+		}
+
+		public DialogBuilder WithCheckBox(
+			string id,
+			string label,
+			bool? enabled = null,
+			string tooltip = null,
+			int? x = null,
+			int? y = null,
+			int? relativeX = null,
+			int? relativeY = null ) {
+			_script.AddFormat( "{0}.type = checkbox", id );
+			_script.AddFormat( "{0}.label = {1}", id, label );
+			if( enabled.HasValue && !enabled.Value ) {
+				_script.AddFormat( "{0}.disabled = 1", id );
+			}
+			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
+				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
+			}
+			if( x.HasValue ) {
+				_script.AddFormat( "{0}.x = {1}", id, x );
+			}
+			if( y.HasValue ) {
+				_script.AddFormat( "{0}.y = {1}", id, y );
+			}
+			if( relativeX.HasValue ) {
+				_script.AddFormat( "{0}.relx = {1}", id, relativeX );
+			}
+			if( relativeY.HasValue ) {
+				_script.AddFormat( "{0}.rely = {1}", id, relativeY );
+			}
+
+			return this;
+		}		
+
+		public DialogBuilder WithComboBox(
+			string id,
+			string label,
+			IEnumerable<string> options,
+			string defaultOption = null,
+			AutoCompletion completion = AutoCompletion.CaseSensitive,
+			bool? enabled = null,
+			string tooltip = null,
+			int? width = null,	
+			int? x = null,
+			int? y = null,
+			int? relativeX = null,
+			int? relativeY = null ) {
+			_script.AddFormat( "{0}.type = combobox", id );
+			_script.AddFormat( "{0}.label = {1}", id, label );
+
+			foreach( var option in options ) {
+				_script.AddFormat( "{0}.option = {1}", id, option );
+			}
+
+			if( !String.IsNullOrWhiteSpace( defaultOption ) ) {
+				_script.AddFormat( "{0}.default = {1}", id, defaultOption );	
+			}
+
+			if( completion != AutoCompletion.CaseSensitive ) {
+				_script.AddFormat( "{0}.completion = {1}", id, (int)completion );
+			}
+			if( enabled.HasValue && !enabled.Value ) {
+				_script.AddFormat( "{0}.disabled = 1", id );
+			}
+			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
+				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
+			}
+			if( width.HasValue ) {
+				_script.AddFormat( "{0}.width = {1}", id, width );
+			}
+			if( x.HasValue ) {
+				_script.AddFormat( "{0}.x = {1}", id, x );
+			}
+			if( y.HasValue ) {
+				_script.AddFormat( "{0}.y = {1}", id, y );
+			}
+			if( relativeX.HasValue ) {
+				_script.AddFormat( "{0}.relx = {1}", id, relativeX );
+			}
+			if( relativeY.HasValue ) {
+				_script.AddFormat( "{0}.rely = {1}", id, relativeY );
+			}
+
+			return this;
+		}
+
 		public void Show() {
 			var startInfo = new ProcessStartInfo {
 				UseShellExecute = false,

@@ -5,6 +5,13 @@ using PashuaWrapper.ListExtensions;
 using PashuaWrapper.BooleanExtensions;
 
 namespace PashuaWrapper {
+	public enum AutoCompletion
+	{
+		None = 0,
+		CaseSensitive = 1,
+		CaseInsensitive = 2,
+	}
+
 	public static class PashuaDialog {
 		public static DialogBuilder Create( 
 			string title = null,
