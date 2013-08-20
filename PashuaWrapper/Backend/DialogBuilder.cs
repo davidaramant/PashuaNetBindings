@@ -15,158 +15,135 @@ namespace PashuaWrapper.Backend {
 			_script.AddRange( script );
 		}
 
+		private sealed class ControlContext {
+			private static int _count;
+			private readonly List<string> _script;
+			private readonly string _id;
+
+			public ControlContext( List<string> script, string id, string type ) {
+				_script = script;
+				_id = id ?? GetNextId();
+				_script.AddFormat( "{0}.type = {1}", _id, type );
+			}
+
+			private string GetNextId() {
+				return "unnamedControl" + _count++;
+			}
+
+			public void Set( string propertyName, string propertyValue ) {
+				if( !String.IsNullOrWhiteSpace( propertyValue ) ) {
+					_script.AddFormat( "{0}.{1} = {2}", _id, propertyName, propertyValue );
+				}
+			}
+
+			public void Set( string propertyName, bool? propertyValue ) {
+				if( propertyValue.HasValue && propertyValue.Value ) {
+					_script.AddFormat( "{0}.{1} = 1", _id, propertyName );
+				}
+			}
+
+			public void Set<T>( string propertyName, T? propertyValue ) where T:struct {
+				if( propertyValue.HasValue ) {
+					_script.AddFormat( "{0}.{1} = {2}", _id, propertyName, propertyValue.Value );
+				}
+			}
+		}
+
 		private string GetRandomId() {
 			return new String( 
 				Enumerable.Range( 0, count: 20 ).
-                Select( _ => (char)_random.Next( 'a', 'z') ).
+                Select( _ => (char)_random.Next( 'a', 'z' ) ).
                 ToArray() );
 		}
 
-		public DialogBuilder WithDefaultButton( 
-								string id = null, 
-								string label = null, 
-								bool? enabled = null, 
-								string tooltip = null ) {
-			id = id ?? GetRandomId();
+		private ControlContext CreateControl( string type, string id = null ) {
+			return new ControlContext( _script, id: id, type: type );
+		}
 
-			_script.AddFormat( "{0}.type = defaultbutton", id );
-			if( !String.IsNullOrWhiteSpace( label ) ) {
-				_script.AddFormat( "{0}.label = {1}", id, label );
-			}
-			if( enabled.HasValue && !enabled.Value ) {
-				_script.AddFormat( "{0}.disabled = 1", id );
-			}
-			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
-				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
-			}
-
-			return this;
-		}		
-
-		public DialogBuilder WithButton( 
-								string id,
-                                string label, 
-		                        int? x = null,
-		                        int? y = null,
-								bool? enabled = null, 
-								string tooltip = null ) {
-			_script.AddFormat( "{0}.type = button", id );
-			_script.AddFormat( "{0}.label = {1}", id, label );
-			if( x.HasValue ) {
-				_script.AddFormat( "{0}.x = {1}", id, x );
-			}
-			if( y.HasValue ) {
-				_script.AddFormat( "{0}.y = {1}", id, y );
-			}
-			if( enabled.HasValue && !enabled.Value ) {
-				_script.AddFormat( "{0}.disabled = 1", id );
-			}
-			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
-				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
-			}
-
+		public DialogBuilder WithDefaultButton( string id = null, 
+		                                        string label = null, 
+		                                        bool? enabled = null, 
+		                                        string tooltip = null ) {
+			var control = CreateControl( type: "defaultbutton", id: id );
+			control.Set( "label", label );
+			control.Set( "disabled", !enabled );
+			control.Set( "tooltip", tooltip );
 			return this;
 		}
 
-		public DialogBuilder WithCancelButton( 
-		                                string id = "cancel",
-		                                string label = null, 
-		                                bool? enabled = null, 
-		                                string tooltip = null ) {
-			_script.AddFormat( "{0}.type = cancelbutton", id );
-			_script.AddFormat( "{0}.label = {1}", id, label );
-			if( enabled.HasValue && !enabled.Value ) {
-				_script.AddFormat( "{0}.disabled = 1", id );
-			}
-			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
-				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
-			}
-
+		public DialogBuilder WithButton( string id,
+		                                 string label, 
+		                                 int? x = null,
+		                                 int? y = null,
+		                                 bool? enabled = null, 
+		                                 string tooltip = null ) {
+			var control = CreateControl( type: "button", id: id );
+			control.Set( "label", label );
+			control.Set( "x", x );
+			control.Set( "y", y );
+			control.Set( "disabled", !enabled );
+			control.Set( "tooltip", tooltip );
 			return this;
 		}
 
-		public DialogBuilder WithCheckBox(
-			string id,
-			string label,
-			bool? enabled = null,
-			string tooltip = null,
-			int? x = null,
-			int? y = null,
-			int? relativeX = null,
-			int? relativeY = null ) {
-			_script.AddFormat( "{0}.type = checkbox", id );
-			_script.AddFormat( "{0}.label = {1}", id, label );
-			if( enabled.HasValue && !enabled.Value ) {
-				_script.AddFormat( "{0}.disabled = 1", id );
-			}
-			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
-				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
-			}
-			if( x.HasValue ) {
-				_script.AddFormat( "{0}.x = {1}", id, x );
-			}
-			if( y.HasValue ) {
-				_script.AddFormat( "{0}.y = {1}", id, y );
-			}
-			if( relativeX.HasValue ) {
-				_script.AddFormat( "{0}.relx = {1}", id, relativeX );
-			}
-			if( relativeY.HasValue ) {
-				_script.AddFormat( "{0}.rely = {1}", id, relativeY );
-			}
-
+		public DialogBuilder WithCancelButton( string id = "cancel",
+		                                       string label = null, 
+		                                       bool? enabled = null, 
+		                                       string tooltip = null ) {
+			var control = CreateControl( type: "cancelbutton", id: id );
+			control.Set( "label", label );
+			control.Set( "disabled", !enabled );
+			control.Set( "tooltip", tooltip );
 			return this;
-		}		
+		}
 
-		public DialogBuilder WithComboBox(
-			string id,
-			string label,
-			IEnumerable<string> options,
-			string defaultOption = null,
-			AutoCompletion completion = AutoCompletion.CaseSensitive,
-			bool? enabled = null,
-			string tooltip = null,
-			int? width = null,	
-			int? x = null,
-			int? y = null,
-			int? relativeX = null,
-			int? relativeY = null ) {
-			_script.AddFormat( "{0}.type = combobox", id );
-			_script.AddFormat( "{0}.label = {1}", id, label );
+		public DialogBuilder WithCheckBox( string id,
+		                                   string label,
+		                                   bool? enabled = null,
+		                                   string tooltip = null,
+		                                   int? x = null,
+		                                   int? y = null,
+		                                   int? relativeX = null,
+		                                   int? relativeY = null ) {
+			var control = CreateControl( type: "checkbox", id: id );
+			control.Set( "label", label );
+			control.Set( "disabled", !enabled );
+			control.Set( "tooltip", tooltip );
+			control.Set( "x", x );
+			control.Set( "y", y );
+			control.Set( "relX", relativeX );
+			control.Set( "relY", relativeY );
+			return this;
+		}
 
+		public DialogBuilder WithComboBox( string id,
+		                                   string label,
+		                                   IEnumerable<string> options,
+		                                   string defaultOption = null,
+		                                   AutoCompletion completion = AutoCompletion.CaseSensitive,
+		                                   bool? enabled = null,
+		                                   string tooltip = null,
+		                                   int? width = null,	
+		                                   int? x = null,
+		                                   int? y = null,
+		                                   int? relativeX = null,
+		                                   int? relativeY = null ) {
+			var control = CreateControl( type: "combobox", id: id );
+			control.Set( "label", label );
 			foreach( var option in options ) {
-				_script.AddFormat( "{0}.option = {1}", id, option );
+				control.Set( "option", option );
 			}
-
-			if( !String.IsNullOrWhiteSpace( defaultOption ) ) {
-				_script.AddFormat( "{0}.default = {1}", id, defaultOption );	
-			}
-
+			control.Set( "default", defaultOption );
 			if( completion != AutoCompletion.CaseSensitive ) {
-				_script.AddFormat( "{0}.completion = {1}", id, (int)completion );
+				control.Set( "completion", (int)completion );
 			}
-			if( enabled.HasValue && !enabled.Value ) {
-				_script.AddFormat( "{0}.disabled = 1", id );
-			}
-			if( !String.IsNullOrWhiteSpace( tooltip ) ) {
-				_script.AddFormat( "{0}.tooltip = {1}", id, tooltip );
-			}
-			if( width.HasValue ) {
-				_script.AddFormat( "{0}.width = {1}", id, width );
-			}
-			if( x.HasValue ) {
-				_script.AddFormat( "{0}.x = {1}", id, x );
-			}
-			if( y.HasValue ) {
-				_script.AddFormat( "{0}.y = {1}", id, y );
-			}
-			if( relativeX.HasValue ) {
-				_script.AddFormat( "{0}.relx = {1}", id, relativeX );
-			}
-			if( relativeY.HasValue ) {
-				_script.AddFormat( "{0}.rely = {1}", id, relativeY );
-			}
-
+			control.Set( "disabled", !enabled );
+			control.Set( "tooltip", tooltip );
+			control.Set( "width", width );
+			control.Set( "x", x );
+			control.Set( "y", y );
+			control.Set( "relX", relativeX );
+			control.Set( "relY", relativeY );
 			return this;
 		}
 
