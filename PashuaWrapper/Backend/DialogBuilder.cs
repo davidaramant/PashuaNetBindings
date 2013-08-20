@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
@@ -36,13 +37,13 @@ namespace PashuaWrapper.Backend {
 				}
 			}
 
-			public void Set( string propertyName, bool? propertyValue ) {
-				if( propertyValue.HasValue && propertyValue.Value ) {
+			public void Set( string propertyName, bool? propertyValue, bool defaultValue ) {
+				if( propertyValue.HasValue && propertyValue != defaultValue ) {
 					_script.AddFormat( "{0}.{1} = 1", _id, propertyName );
 				}
 			}
 
-			public void Set<T>( string propertyName, T? propertyValue ) where T:struct {
+			public void Set( string propertyName, int? propertyValue ) {
 				if( propertyValue.HasValue ) {
 					_script.AddFormat( "{0}.{1} = {2}", _id, propertyName, propertyValue.Value );
 				}
@@ -66,7 +67,7 @@ namespace PashuaWrapper.Backend {
 		                                        string tooltip = null ) {
 			var control = CreateControl( type: "defaultbutton", id: id );
 			control.Set( "label", label );
-			control.Set( "disabled", !enabled );
+			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			return this;
 		}
@@ -81,7 +82,7 @@ namespace PashuaWrapper.Backend {
 			control.Set( "label", label );
 			control.Set( "x", x );
 			control.Set( "y", y );
-			control.Set( "disabled", !enabled );
+			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			return this;
 		}
@@ -92,7 +93,7 @@ namespace PashuaWrapper.Backend {
 		                                       string tooltip = null ) {
 			var control = CreateControl( type: "cancelbutton", id: id );
 			control.Set( "label", label );
-			control.Set( "disabled", !enabled );
+			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			return this;
 		}
@@ -107,7 +108,7 @@ namespace PashuaWrapper.Backend {
 		                                   int? relativeY = null ) {
 			var control = CreateControl( type: "checkbox", id: id );
 			control.Set( "label", label );
-			control.Set( "disabled", !enabled );
+			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			control.Set( "x", x );
 			control.Set( "y", y );
@@ -135,15 +136,38 @@ namespace PashuaWrapper.Backend {
 			}
 			control.Set( "default", defaultOption );
 			if( completion != AutoCompletion.CaseSensitive ) {
-				control.Set( "completion", (int)completion );
+				control.Set( "completion", ((int)completion).ToString( CultureInfo.InvariantCulture ) );
 			}
-			control.Set( "disabled", !enabled );
+			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			control.Set( "width", width );
 			control.Set( "x", x );
 			control.Set( "y", y );
 			control.Set( "relX", relativeX );
 			control.Set( "relY", relativeY );
+			return this;
+		}
+
+		public DialogBuilder WithDate( string id,
+		                               bool textual = false,
+		                               bool chooseDate = true,
+		                               bool chooseTime = false,
+		                               DateTime? defaultDateTime = null,
+		                               int? x = null,
+		                               int? y = null,
+		                               bool? enabled = false,
+		                               string tooltip = null ) {
+			var control = CreateControl( type: "date", id: id );
+			control.Set( "textual", textual, defaultValue: false );
+			control.Set( "date", chooseDate, defaultValue: true );
+			control.Set( "time", chooseTime, defaultValue: false );
+			if( defaultDateTime.HasValue ) {
+				control.Set( "default", defaultDateTime.Value.ToString( "yyyy-MM-dd HH:mm" ) );
+			}
+			control.Set( "x", x );
+			control.Set( "y", y );
+			control.Set( "disabled", !enabled, defaultValue: false );
+			control.Set( "tooltip", tooltip );
 			return this;
 		}
 
