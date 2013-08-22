@@ -40,4 +40,10 @@
       <Name>PashuaWrapper</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.png">
+      <Gettext-ScanForTranslations>False</Gettext-ScanForTranslations>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

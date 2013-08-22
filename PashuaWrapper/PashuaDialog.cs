@@ -5,11 +5,16 @@ using PashuaWrapper.ListExtensions;
 using PashuaWrapper.BooleanExtensions;
 
 namespace PashuaWrapper {
-	public enum AutoCompletion
-	{
+	public enum AutoCompletion {
 		None = 0,
 		CaseSensitive = 1,
 		CaseInsensitive = 2,
+	}
+
+	public enum FontSize {
+		Regular,
+		Small,
+		Mini
 	}
 
 	public static class PashuaDialog {
@@ -27,7 +32,7 @@ namespace PashuaWrapper {
 				script.AddFormat( "*.title = {0}", title );
 			}
 
-			if( transparency.HasValue ){
+			if( transparency.HasValue ) {
 				script.AddFormat( "*.transparency = {0}", transparency );
 			}
 
