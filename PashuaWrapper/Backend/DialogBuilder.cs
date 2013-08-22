@@ -61,17 +61,6 @@ namespace PashuaWrapper.Backend {
 			return new ControlContext( _script, id: id, type: type );
 		}
 
-		public DialogBuilder WithDefaultButton( string id = null, 
-		                                        string label = null, 
-		                                        bool? enabled = null, 
-		                                        string tooltip = null ) {
-			var control = CreateControl( type: "defaultbutton", id: id );
-			control.Set( "label", label );
-			control.Set( "disabled", !enabled, defaultValue: false );
-			control.Set( "tooltip", tooltip );
-			return this;
-		}
-
 		public DialogBuilder WithButton( string id,
 		                                 string label, 
 		                                 int? x = null,
@@ -166,6 +155,17 @@ namespace PashuaWrapper.Backend {
 			}
 			control.Set( "x", x );
 			control.Set( "y", y );
+			control.Set( "disabled", !enabled, defaultValue: false );
+			control.Set( "tooltip", tooltip );
+			return this;
+		}
+
+		public DialogBuilder WithDefaultButton( string id = null, 
+		                                       string label = null, 
+		                                       bool? enabled = null, 
+		                                       string tooltip = null ) {
+			var control = CreateControl( type: "defaultbutton", id: id );
+			control.Set( "label", label );
 			control.Set( "disabled", !enabled, defaultValue: false );
 			control.Set( "tooltip", tooltip );
 			return this;
