@@ -5,7 +5,8 @@ using PashuaWrapper.BooleanExtensions;
 
 namespace PashuaWrapper {
 	public sealed class ControlContext {
-		private static int _count;
+		// HACK: This seems a bit gross, but shouldn't cause any problems and does guarantee that the ids are unique.
+		private static int _unnamedControlCount;
 		private readonly List<string> _script;
 		private readonly string _id;
 
@@ -21,7 +22,7 @@ namespace PashuaWrapper {
 		}
 
 		private string GetNextId() {
-			return "unnamedControl" + _count++;
+			return "unnamedControl" + _unnamedControlCount++;
 		}
 
 		public void Set( string propertyName, string propertyValue ) {
