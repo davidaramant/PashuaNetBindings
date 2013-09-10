@@ -36,6 +36,7 @@
     <Compile Include="Backend\DialogBuilder.cs" />
     <Compile Include="BooleanExtensions\Extensions.cs" />
     <Compile Include="ListExtensions\Extensions.cs" />
+    <Compile Include="Backend\ControlContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

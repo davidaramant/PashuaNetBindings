@@ -5,7 +5,7 @@ namespace Runner {
 	class MainClass {
 		public static void Main( string[] args ) {
 			PashuaDialog.
-				Create( title: "Hello" ).
+				Create( title: "Hello", floating:true, brushedMetal:true ).
 				WithButton( id: "one", label: "Another option" ).
 				WithDefaultButton( label: "Yup" ).
 				WithCancelButton( id: "cancel", label: "Cancel button" ).
