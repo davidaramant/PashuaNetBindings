@@ -7,7 +7,7 @@ namespace PashuaWrapper.BooleanExtensions {
 		}
 
 		public static int ToInt( this bool? value ) {
-			return value.Value ? 1 : 0;
+			return value == true ? 1 : 0;
 		}
 	}
 }

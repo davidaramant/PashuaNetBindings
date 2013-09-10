@@ -61,3 +61,4 @@ UpgradeLog*.htm
 
 # Mac crap
 .DS_Store
+*test-results*
