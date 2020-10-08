@@ -5,8 +5,4 @@
     <RootNamespace>Pashua</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
 </Project>
