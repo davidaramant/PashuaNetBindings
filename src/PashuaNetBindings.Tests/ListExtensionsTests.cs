@@ -1,12 +1,13 @@
-using System;
+using FluentAssertions;
+using Pashua.ListExtensions;
 using System.Collections.Generic;
 using Xunit;
-using Pashua.ListExtensions;
 
-namespace Pashua.Tests {
-	public class ListExtensionsTests {
+namespace Pashua.Tests
+{
+    public class ListExtensionsTests {
 		[Fact]
-		public void ShouldAddFormatedStringToList()
+		public void ShouldAddFormattedStringToList()
 		{
 			const string format = "Format: {0}";
 			const string args = "100";
@@ -14,10 +15,9 @@ namespace Pashua.Tests {
 			var list = new List<string>();
 			list.AddFormat( format, args );
 
-			Assert.That( list, Has.Count.EqualTo( 1 ), "Added incorrect number of entries." );
-			Assert.That( list[ 0 ], Is.EqualTo( String.Format( format, args ) ),
-			             "Did not added formatted string." );
-		}
+            list.Should().HaveCount(1);
+            list[0].Should().Be(string.Format(format, args));
+        }
 	}
 }
 

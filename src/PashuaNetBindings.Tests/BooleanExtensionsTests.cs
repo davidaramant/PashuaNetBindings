@@ -1,17 +1,17 @@
-using System;
-using Xunit;
+using FluentAssertions;
 using Pashua.BooleanExtensions;
+using Xunit;
 
-namespace Pashua.Tests {
-
+namespace Pashua.Tests
+{
     public class BooleanExtensionsTests {
 	
 		[Theory]
         [InlineData(true,1)]
 		[InlineData(false,0)]
 		public void ShouldConvertBooleanValues( bool value, int expected )
-		{
-			Assert.That( value.ToInt(), Is.EqualTo( expected ), "Did not convert value." );
+        {
+            value.ToInt().Should().Be(expected);
 		}
 
 		[Theory]
@@ -20,7 +20,7 @@ namespace Pashua.Tests {
 		[InlineData(null,0)]
 		public void ShouldConvertNullableBooleanValues( bool? value, int expected )
 		{
-			Assert.That( value.ToInt(), Is.EqualTo( expected ), "Did not convert value." );
+            value.ToInt().Should().Be(expected);
 		}
 	}
 }
