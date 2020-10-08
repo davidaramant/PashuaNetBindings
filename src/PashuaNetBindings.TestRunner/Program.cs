@@ -1,5 +1,5 @@
 ﻿using System;
-using PashuaWrapper;
+using Pashua;
 
 namespace PashuaNetBindings.TestRunner
 {

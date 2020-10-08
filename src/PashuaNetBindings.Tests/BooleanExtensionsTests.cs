@@ -1,20 +1,23 @@
 using System;
-using NUnit.Framework;
-using PashuaWrapper.BooleanExtensions;
+using Xunit;
+using Pashua.BooleanExtensions;
 
-namespace PashuaWrapper.Tests {
-	[TestFixture]
-	public class BooleanExtensionsTests {
-		[TestCase(true,1)]
-		[TestCase(false,0)]
+namespace Pashua.Tests {
+
+    public class BooleanExtensionsTests {
+	
+		[Theory]
+        [InlineData(true,1)]
+		[InlineData(false,0)]
 		public void ShouldConvertBooleanValues( bool value, int expected )
 		{
 			Assert.That( value.ToInt(), Is.EqualTo( expected ), "Did not convert value." );
 		}
 
-		[TestCase(true,1)]
-		[TestCase(false,0)]
-		[TestCase(null,0)]
+		[Theory]
+		[InlineData(true,1)]
+		[InlineData(false,0)]
+		[InlineData(null,0)]
 		public void ShouldConvertNullableBooleanValues( bool? value, int expected )
 		{
 			Assert.That( value.ToInt(), Is.EqualTo( expected ), "Did not convert value." );

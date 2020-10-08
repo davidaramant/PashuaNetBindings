@@ -1,6 +1,6 @@
 using System;
 
-namespace PashuaWrapper.BooleanExtensions {
+namespace Pashua.BooleanExtensions {
 	public static class Extensions {
 		public static int ToInt( this bool value ) {
 			return value ? 1 : 0;

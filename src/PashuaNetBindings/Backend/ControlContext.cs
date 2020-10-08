@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using PashuaWrapper.ListExtensions;
-using PashuaWrapper.BooleanExtensions;
+using Pashua.ListExtensions;
+using Pashua.BooleanExtensions;
 
-namespace PashuaWrapper {
+namespace Pashua {
 	public sealed class ControlContext {
 		// HACK: This seems a bit gross, but shouldn't cause any problems and does guarantee that the ids are unique.
 		private static int _unnamedControlCount;

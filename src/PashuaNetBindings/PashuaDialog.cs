@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using PashuaWrapper.Backend;
-using PashuaWrapper.ListExtensions;
-using PashuaWrapper.BooleanExtensions;
+using Pashua.Backend;
+using Pashua.ListExtensions;
+using Pashua.BooleanExtensions;
 
-namespace PashuaWrapper {
+namespace Pashua {
 	public enum AutoCompletion {
 		None = 0,
 		CaseSensitive = 1,

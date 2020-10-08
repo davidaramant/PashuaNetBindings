@@ -4,10 +4,10 @@ using System.Globalization;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
-using PashuaWrapper.ListExtensions;
-using PashuaWrapper.BooleanExtensions;
+using Pashua.ListExtensions;
+using Pashua.BooleanExtensions;
 
-namespace PashuaWrapper.Backend {
+namespace Pashua.Backend {
 	public sealed class DialogBuilder {
 		private readonly Random _random = new Random();
 		private readonly List<string> _script = new List<string>();
@@ -323,8 +323,10 @@ namespace PashuaWrapper.Backend {
 			switch( fontSize ) {
 				case FontSize.Mini:
 					control.Set( "fontsize", "mini" );
+                    break;
 				case FontSize.Small:
 					control.Set( "fontsize", "small" );
+                    break;
 				case FontSize.Regular:
 				default:
 					// Do nothing

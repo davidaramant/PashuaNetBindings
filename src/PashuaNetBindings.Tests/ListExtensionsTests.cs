@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
-using PashuaWrapper.ListExtensions;
+using Xunit;
+using Pashua.ListExtensions;
 
-namespace PashuaWrapper.Tests {
-	[TestFixture]
+namespace Pashua.Tests {
 	public class ListExtensionsTests {
-		[Test]
+		[Fact]
 		public void ShouldAddFormatedStringToList()
 		{
 			const string format = "Format: {0}";
