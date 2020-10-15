@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PashuaNetBindings", "PashuaNetBindings\PashuaNetBindings.csproj", "{71AE0F43-D5EC-4EAB-8110-F57B6F3BB888}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PashuaNetBindings.Tests", "PashuaNetBindings.Tests\PashuaNetBindings.Tests.csproj", "{576CF740-C14D-4241-912F-D97B309146D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PashuaNetBindings.Tests", "PashuaNetBindings.Tests\PashuaNetBindings.Tests.csproj", "{576CF740-C14D-4241-912F-D97B309146D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PashuaNetBindings.TestRunner", "PashuaNetBindings.TestRunner\PashuaNetBindings.TestRunner.csproj", "{44CD835E-2303-41FC-97D1-2CBD1D3DF8AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PashuaNetBindings.TestRunner", "PashuaNetBindings.TestRunner\PashuaNetBindings.TestRunner.csproj", "{44CD835E-2303-41FC-97D1-2CBD1D3DF8AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModelGenerator", "DataModelGenerator\DataModelGenerator.csproj", "{3BDEE1C4-5932-4AFD-919F-B42CE7135FD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{44CD835E-2303-41FC-97D1-2CBD1D3DF8AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44CD835E-2303-41FC-97D1-2CBD1D3DF8AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44CD835E-2303-41FC-97D1-2CBD1D3DF8AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BDEE1C4-5932-4AFD-919F-B42CE7135FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BDEE1C4-5932-4AFD-919F-B42CE7135FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BDEE1C4-5932-4AFD-919F-B42CE7135FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDEE1C4-5932-4AFD-919F-B42CE7135FD1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,176 @@
+Control/Property Name	actual name	Summary	Remarks	Required	Default	DataType	Notes
+Window							
+AutoCloseTime		If set, the dialog will automatically close after the specified time has passed. 	The timer starts in the very moment when Pashua has finished parsing the configuration string and everything is set up.	No	-	TimeSpan?	
+AutoSaveKey		Can be used to preserve the window position between launches.	 To let Pashua differentiate between applications, you have to set this to an arbitrary string. I.e.: one application can set this to “abc” and another one to “def”, and for both applications, the window position will be saved and restored separately.	No	-	string	
+floating		Setting this to true will result in the window floating above other windows.		No	false	bool	
+title		Sets the window title		No	Pashua	string	
+transparency		Sets the window’s transparency, from 0 (invisible) to 1 (opaque)		No	1	double	
+x		Sets the horizontal position where the window should be opened on the screen (0 is the left border of the screen)	By default the window will be positioned automatically.	No	-	int	
+y		Sets the vertical position where the window should be opened on the screen (0 is the upper border of the screen)	By default the window will be positioned automatically.	No	-	int	
+							
+button							
+label		Sets the button’s text		Yes	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+							
+cancelButton							
+label		Sets the button title		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+							
+checkBox							
+label		Creates a label / title next to the checkbox		Yes	-	string	
+default		Set this to true if you want the checkbox to be checked by default.		No	-	bool	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+comboBox							
+label		Creates a label above this element		No	-	string	
+options	option	The list of values.		Yes	-	IEnumerable<string>	
+completion		Controls if and how autocompletion is performed.		No	AutoCompletionMode.CaseSensitive	AutoCompletionMode	
+mandatory		If set to true value, input is mandatory.		No	false	bool	
+rows	NumberVisibleRows	Sets the number of visible items/rows.		No	-	int	
+placeholder		If present, this string will be as the field’s placeholder string.		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+width		Width in pixels		No	200	int	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+date							
+label		Sets the date picker’s label (displayed above)		No	-	string	
+textual		Should the textual display style be used instead of the graphical style?		No	false	bool	
+date		Should the user be able to chose a date?		No	true	bool	
+time		Should the user be able to chose the time?		No	false	bool	
+default		Default date and/or time that should be selected when the dialog is opened. 		No	-	DateTime	The only string format that is guaranteed to work is “yyyy-mm-dd [hh:mm]”, for instance “2011-11-29 12:34” or “2011-11-29”. Other string formats such as “12/24/2004”, “next wednesday” or “tomorrow” may work, too.
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+							
+defaultButton							
+label		Sets the button title		No	OK	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	0	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+							
+image							
+label		Creates a label above this element		No	-	string	
+path		Filesystem path to the image		Yes	-	string	
+border		Set this to true to display a border for the image		No	false	bool	
+width		If this attribute is set to some integer number, the image’s width will be set to this width (including border)		No	-	int	
+height		If this attribute is set to some integer number, the image’s height will be set to this value (including border)		No	-	int	
+maxWidth		If this attribute is set to some integer number, the image will be scaled down to this width (including border), if it’s wider	Default is calculated from window’s width	No	-	int	
+maxHeight		If this attribute is set to some integer number, the image will be scaled down to this height (including border), if it’s higher	Default is calculated from window’s height	No	-	int	
+upscale		Set this to true to allow the image to be upscaled (which will only have an effect if setting width or height)		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+openBrowser							
+label		Creates a label above this element		No	-	string	
+width		Sets the width (overall width of texfield and button)		No	300	int	
+default		Default path		No	-	string	
+FileTypes	filetype	File types that can be selected in the open dialog or dropped onto the textfield. In addition to filename extensions, you can use directory to let the user choose directories.	 If only directory is specified, the user won’t be able to choose any files. If only filename extensions are specified, the user won’t be able to choose directories. If you don’t specify filetype at all, the user will be able to choose anything in the open dialog box.	No	-	IEnumerable<string>	; takes a space-delimited list of filename extensions (such as jpg gif tif etc.)
+mandatory		If set to true, input is mandatory.		No	false	bool	
+placeholder		If present, this string will be as the field’s placeholder string.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+password							
+label		Creates a label/title above this element		No	-	string	
+width		The textfield’s width in pixels		No	200	int	
+default		The textfield’s initial contents		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+mandatory		If set to true, input is mandatory.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+popup							
+Options	option	Any strings that should appear as an entry in the popup		Yes	-	IEnumerable<string>	
+default		Default value (should match one of the option attributes)		No	-	string	
+label		Creates a label above this element		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+mandatory		If set to true, input is mandatory.		No	false	bool	
+width		Width in pixels		No	200	int	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+radioButton							
+label		Creates a label above this element		No	-	string	
+options	option	Any strings that should be used as a selectable value.		Yes	-	IEnumerable<string>	
+default		The value that should be selected by default. Of course, this must be one of the option values to work.		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+mandatory		If set to true, input is mandatory.		No	false	bool	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+saveBrowser							
+label		Creates a label above this element		No	-	string	
+width		Sets the width (overall width of texfield and button)		No	300	int	
+default		Default path		No	-	string	
+filetype		File extension to use for the save dialog box; if this attribute is used, the user will be forced to use that extension for the name		No	-	string	
+mandatory		If set to true, input is mandatory.		No	false	bool	
+placeholder		If present, this string will be as the field’s placeholder string.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+text							
+label		Creates a label above this element		No	-	string	
+width		Sets the width of the text (in pixels)		No	280	int	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+text		The text to display. You can use the string [return] to insert a linebreak.		Yes	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+textBox							
+label		Creates a label above this element		No	-	string	
+width		Sets the width of the textbox (in pixels)		No	250	int	
+height		Sets the height of the text (in pixels)		No	52	int	
+default		Sets the initial contents. You can use the string [return] to insert a linebreak.		No	-	string	
+fontSize		Size of the text inside the textbox. There are three sizes available, which conform to the system’s standard sizes: regular, small, or mini.		No	FontSize.Regular	FontSize	
+fontType		Set this to control if the text should be displayed using a monospace font.		No	FontType.Proportional	FontType	true is fixed
+mandatory		If set to true, input is mandatory.		No	false	bool	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
+							
+textField							
+label		Creates a label above this element		No	-	string	
+width		The textfield’s width in pixels		No	200	int	
+default		The textfield’s initial contents		No	-	string	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
+mandatory		If set to true, input is mandatory.		No	false	bool	
+placeholder		If present, this string will be as the field’s placeholder string.		No	-	string	
+tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
+x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int	
+y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int	
+RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	
+RelY		Relative vertical distance to the next element below (“relative” means that the value is added to the default distance). Any integer larger than -20 can be used as RelY value.		No	0	int	
