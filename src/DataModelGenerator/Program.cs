@@ -88,7 +88,7 @@ namespace DataModelGenerator
                 using var writer = new StreamWriter(fs);
                 using var file = new IndentedWriter(writer);
 
-                var needsSystem = control.Properties.Any(p => p.DataType.StartsWith("DateTime"));
+                var needsSystem = control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
                 var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
                 if (needsSystem)
                 {
