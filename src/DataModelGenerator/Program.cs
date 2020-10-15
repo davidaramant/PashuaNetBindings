@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Humanizer;
 
 namespace DataModelGenerator
@@ -16,7 +16,22 @@ namespace DataModelGenerator
 
         public string ClassName => Name + "Control";
         public string FileName => ClassName + ".cs";
-        public string PashuaName => Name.ToLower();
+
+        public bool IsWindow => Name.ToLowerInvariant() == "window";
+
+        public string PashuaName => IsWindow ? "*" : Name.ToLower();
+    }
+
+    enum PropertyType
+    {
+        String,
+        Double,
+        Int,
+        Bool,
+        Enum,
+        NullableTimeSpan,
+        DateTime,
+        StringCollection,
     }
 
     class Property
@@ -31,6 +46,33 @@ namespace DataModelGenerator
 
         public bool HasDefault => Default != "-";
         public string DefaultValue => DataType == "string" ? $"\"{Default}\"" : Default;
+
+        public string PashuaName
+        {
+            get
+            {
+                var name = string.IsNullOrEmpty(ActualName) ? Name : ActualName;
+                return name.ToLowerInvariant();
+            }
+        }
+
+        public PropertyType Type
+        {
+            get
+            {
+                return DataType switch
+                {
+                    "string" => PropertyType.String,
+                    "double" => PropertyType.Double,
+                    "int" => PropertyType.Int,
+                    "bool" => PropertyType.Bool,
+                    "DateTime" => PropertyType.DateTime,
+                    "TimeSpan?" => PropertyType.NullableTimeSpan,
+                    "IEnumerable<string>" => PropertyType.StringCollection,
+                    _ => PropertyType.Enum,
+                };
+            }
+        }
     }
 
     class Program
@@ -98,38 +140,104 @@ namespace DataModelGenerator
                 using var writer = new StreamWriter(fs);
                 using var file = new IndentedWriter(writer);
 
-                var needsSystem = control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
-                var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
-                if (needsSystem)
-                {
-                    file.Line("using System;");
-                }
-                if (needsCollections)
-                {
-                    file.Line("using System.Collections.Generic;");
-                }
-
-                if (needsSystem && needsCollections)
-                {
-                    file.Line();
-                }
-
-                file.Line("namespace Pashua").OpenParen();
+                WriteUsings(control, file);
 
                 WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed class {control.ClassName}").OpenParen();
+                file.Line($"public sealed class {control.ClassName} : Backend.BaseControl").OpenParen();
 
-                foreach (var property in control.Properties)
-                {
-                    WriteDocumentation(file, property.Summary, property.Remarks, 12);
-                    file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}" + 
-                              (property.HasDefault ? $" = {property.DefaultValue};" : ""));
-                    file.Line();
-                }
+                WriteProperties(control, file);
+                WriteWriteToMethod(file, control);
 
-                // Close class and namespace
-                file.CloseParen().CloseParen();
+
+                file.CloseParen().CloseParen(); // Close class and namespace
             }
+        }
+
+        private static void WriteWriteToMethod(IndentedWriter file, Control control)
+        {
+            file.Line("/// <summary>").Line("/// Writes the control script to the given writer.").Line("/// </summary>");
+            file.Line("public void WriteTo(System.IO.StreamWriter writer)").OpenParen();
+
+            if (!control.IsWindow)
+            {
+                file.Line($"writer.WriteLine($\"{{Id}}.type = {control.PashuaName}\");");
+            }
+
+            foreach (var property in control.Properties)
+            {
+                var id = control.IsWindow ? "*" : "{Id}";
+
+                // Very special case
+                if (property.PashuaName == "fonttype")
+                {
+                    file.Line($"if ({property.Name} != {property.DefaultValue})")
+                        .OpenParen()
+                        .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = fixed;\");")
+                        .CloseParen();
+                }
+                else if (property.Type == PropertyType.StringCollection)
+                {
+                    file.Line($"foreach (var option in {property.Name})")
+                        .OpenParen()
+                        .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{option}};\");")
+                        .CloseParen();
+                }
+                else
+                {
+                    var value = property.Type switch
+                    {
+                        PropertyType.Bool => $"({property.Name} ? 1 : 0)",
+                        PropertyType.DateTime => property.Name +".ToString(\"yyyy-mm-dd hh:mm\")",
+                        PropertyType.Double => property.Name +":N2",
+                        PropertyType.NullableTimeSpan =>  $"(int?){property.Name}?.TotalSeconds",
+                        PropertyType.Enum => $"(int){property.Name}",
+                        _ => property.Name,
+                    };
+
+                    file.Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{{value}}};\");");
+                }
+            }
+
+            file.CloseParen(); // Close WriteTo
+        }
+
+        private static void WriteProperties(Control control, IndentedWriter file)
+        {
+            if (!control.IsWindow)
+            {
+                file.Line($"internal string Id => \"{control.PashuaName}\" + GetHashCode();").Line();
+            }
+
+            foreach (var property in control.Properties)
+            {
+                WriteDocumentation(file, property.Summary, property.Remarks, 12);
+                file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}" +
+                          (property.HasDefault ? $" = {property.DefaultValue};" : ""));
+                file.Line();
+            }
+        }
+
+        private static void WriteUsings(Control control, IndentedWriter file)
+        {
+            var needsSystem =
+                control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
+            var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
+            if (needsSystem)
+            {
+                file.Line("using System;");
+            }
+
+            if (needsCollections)
+            {
+                file.Line("using System.Collections.Generic;");
+            }
+
+            if (needsSystem && needsCollections)
+            {
+                file.Line();
+            }
+
+            file.Line("namespace Pashua").OpenParen();
         }
 
         private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)
