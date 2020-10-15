@@ -28,6 +28,9 @@ namespace DataModelGenerator
         public bool Required { get; set; }
         public string Default { get; set; }
         public string DataType { get; set; }
+
+        public bool HasDefault => Default != "-";
+        public string DefaultValue => DataType == "string" ? $"\"{Default}\"" : Default;
     }
 
     class Program
@@ -119,7 +122,8 @@ namespace DataModelGenerator
                 foreach (var property in control.Properties)
                 {
                     WriteDocumentation(file, property.Summary, property.Remarks, 12);
-                    file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}");
+                    file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}" + 
+                              (property.HasDefault ? $" = {property.DefaultValue};" : ""));
                     file.Line();
                 }
 

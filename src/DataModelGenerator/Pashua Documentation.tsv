@@ -58,7 +58,7 @@ tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.	
 							
 defaultButton		When the default button is pressed, the window is closed and all elements’ values are returned to the calling script. The default button is always located in the lower right corner of the window and can’t be moved to any other position.	A default button is added to each window automatically – you only have to specify it explicitly, if you want to set the label or a tooltip or need the return value (i.e.: has it been clicked?) of this button.				
 label		Sets the button title		No	OK	string	
-disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	0	bool	
+disabled		If set to true, the element will be disabled, so that the default value cannot be changed.		No	false	bool	
 tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
 							
 image		This element displays an image (or a PDF file), optionally scaling it to a maximum width or height. 	Pashua can handle any image type that is supported by NSImage. This includes TIFF, GIF, JPEG, PNG, PDF, PICT and EPS.				
