@@ -18,7 +18,7 @@ namespace PashuaNetBindings.TestRunner
                     "Here are some options",
                     new[] {"Cat", "Dog", "Horse"},
                     "Dog",
-                    AutoCompletion.CaseInsensitive)
+                    AutoCompletionMode.CaseInsensitive)
                 .WithDate("Date1", chooseTime: true, defaultDateTime: new DateTime(2013, 01, 01, 01, 02, 03))
                 .WithImage("test.png", label: "Test image", border: true, tooltip: "Sure is").WithOpenBrowser("browser",
                     "Select an image",

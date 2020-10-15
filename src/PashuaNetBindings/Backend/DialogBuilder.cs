@@ -80,7 +80,7 @@ namespace Pashua.Backend
             string label,
             IEnumerable<string> options,
             string defaultOption = null,
-            AutoCompletion completion = AutoCompletion.CaseSensitive,
+            AutoCompletionMode completionMode = AutoCompletionMode.CaseSensitive,
             bool? enabled = null,
             string tooltip = null,
             int? width = null,
@@ -93,8 +93,8 @@ namespace Pashua.Backend
             control.Set("label", label);
             foreach (var option in options) control.Set("option", option);
             control.Set("default", defaultOption);
-            if (completion != AutoCompletion.CaseSensitive)
-                control.Set("completion", ((int) completion).ToString(CultureInfo.InvariantCulture));
+            if (completionMode != AutoCompletionMode.CaseSensitive)
+                control.Set("completion", ((int) completionMode).ToString(CultureInfo.InvariantCulture));
             control.Set("disabled", !enabled, false);
             control.Set("tooltip", tooltip);
             control.Set("width", width);
