@@ -10,6 +10,8 @@ namespace DataModelGenerator
     class Control
     {
         public string Name { get; set; }
+        public string Summary { get; set; }
+        public string Remarks { get; set; }
         public List<Property> Properties { get; } = new List<Property>();
 
         public string ClassName => Name + "Control";
@@ -44,14 +46,19 @@ namespace DataModelGenerator
             // Skip the header row
             foreach (var line in File.ReadLines("Pashua Documentation.tsv").Skip(1))
             {
-                if(string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
                     continue;
 
                 var cols = line.Split('\t').Select(col => col.Trim()).ToArray();
 
-                if (cols[0] != string.Empty && cols.Skip(1).All(c => c == string.Empty))
+                if (cols[0] != string.Empty && cols.Skip(4).All(c => c == string.Empty))
                 {
-                    controls.Add(new Control { Name = cols[0].Pascalize() });
+                    controls.Add(new Control
+                    {
+                        Name = cols[0].Pascalize(),
+                        Summary = cols[2],
+                        Remarks = cols[3],
+                    });
                 }
                 else
                 {
@@ -83,7 +90,7 @@ namespace DataModelGenerator
             foreach (var control in controls)
             {
                 var filePath = Path.Combine(outputPath, control.FileName);
-                
+
                 using var fs = File.Open(filePath, FileMode.Create);
                 using var writer = new StreamWriter(fs);
                 using var file = new IndentedWriter(writer);
@@ -106,16 +113,51 @@ namespace DataModelGenerator
 
                 file.Line("namespace Pashua").OpenParen();
 
+                WriteDocumentation(file, control.Summary, control.Remarks, 8);
                 file.Line($"public sealed class {control.ClassName}").OpenParen();
 
                 foreach (var property in control.Properties)
                 {
+                    WriteDocumentation(file, property.Summary, property.Remarks, 12);
                     file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}");
+                    file.Line();
                 }
 
                 // Close class and namespace
                 file.CloseParen().CloseParen();
             }
+        }
+
+        private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)
+        {
+            file.Line("/// <summary>");
+            foreach (var sumLine in BreakUpDocumentationLine(summary, indent))
+            {
+                file.Line("/// " + sumLine);
+            }
+            file.Line("/// </summary>");
+            if (!string.IsNullOrWhiteSpace(remarks))
+            {
+                file.Line("/// <remarks>");
+                foreach (var remLine in BreakUpDocumentationLine(remarks, indent))
+                {
+                    file.Line("/// " + remLine);
+                }
+                file.Line("/// </remarks>");
+            }
+        }
+
+        private static IEnumerable<string> BreakUpDocumentationLine(string longLine, int indent)
+        {
+            int maxLength = 120 - indent - 1;
+            while (longLine.Length >= maxLength)
+            {
+                var breakPoint = longLine.LastIndexOf(' ', maxLength);
+                yield return longLine.Substring(0, breakPoint);
+                longLine = longLine.Substring(breakPoint + 1);
+            }
+
+            yield return longLine;
         }
     }
 }
