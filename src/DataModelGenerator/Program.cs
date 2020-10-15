@@ -12,7 +12,9 @@ namespace DataModelGenerator
         public string Name { get; set; }
         public List<Property> Properties { get; } = new List<Property>();
 
-        public string FileName => Name + ".cs";
+        public string ClassName => Name + "Control";
+        public string FileName => ClassName + ".cs";
+        public string PashuaName => Name.ToLower();
     }
 
     class Property
@@ -39,10 +41,14 @@ namespace DataModelGenerator
         {
             var controls = new List<Control>();
 
-            // Skip the header row an all blank lines
-            foreach (var line in File.ReadLines("Pashua Documentation.tsv").Skip(1).Where(line => line != string.Empty))
+            // Skip the header row
+            foreach (var line in File.ReadLines("Pashua Documentation.tsv").Skip(1))
             {
+                if(string.IsNullOrWhiteSpace(line))
+                    continue;
+
                 var cols = line.Split('\t').Select(col => col.Trim()).ToArray();
+
                 if (cols[0] != string.Empty && cols.Skip(1).All(c => c == string.Empty))
                 {
                     controls.Add(new Control { Name = cols[0].Pascalize() });
@@ -80,8 +86,35 @@ namespace DataModelGenerator
                 
                 using var fs = File.Open(filePath, FileMode.Create);
                 using var writer = new StreamWriter(fs);
+                using var file = new IndentedWriter(writer);
 
-                writer.WriteLine($"//{control.Name}");
+                var needsSystem = control.Properties.Any(p => p.DataType.StartsWith("DateTime"));
+                var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
+                if (needsSystem)
+                {
+                    file.Line("using System;");
+                }
+                if (needsCollections)
+                {
+                    file.Line("using System.Collections.Generic;");
+                }
+
+                if (needsSystem && needsCollections)
+                {
+                    file.Line();
+                }
+
+                file.Line("namespace Pashua").OpenParen();
+
+                file.Line($"public sealed class {control.ClassName}").OpenParen();
+
+                foreach (var property in control.Properties)
+                {
+                    file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}");
+                }
+
+                // Close class and namespace
+                file.CloseParen().CloseParen();
             }
         }
     }
