@@ -184,17 +184,29 @@ namespace DataModelGenerator
                 }
                 else
                 {
+                    if (property.HasDefault)
+                    {
+                        file.Line($"if ({property.Name} != {property.DefaultValue})")
+                            .OpenParen();
+                    }
+
                     var value = property.Type switch
                     {
                         PropertyType.Bool => $"({property.Name} ? 1 : 0)",
                         PropertyType.DateTime => property.Name +".ToString(\"yyyy-mm-dd hh:mm\")",
                         PropertyType.Double => property.Name +":N2",
                         PropertyType.NullableTimeSpan =>  $"(int?){property.Name}?.TotalSeconds",
-                        PropertyType.Enum => $"(int){property.Name}",
+                        PropertyType.Enum => $"{property.Name}.ToString().ToLowerInvariant()",
                         _ => property.Name,
                     };
 
                     file.Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{{value}}};\");");
+
+                    if (property.HasDefault)
+                    {
+                        file.CloseParen();
+                    }
+
                 }
             }
 
