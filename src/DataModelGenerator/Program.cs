@@ -25,12 +25,13 @@ namespace DataModelGenerator
     enum PropertyType
     {
         String,
-        Double,
+        NullableDouble,
+        NullableInt,
         Int,
         Bool,
         Enum,
         NullableTimeSpan,
-        DateTime,
+        NullableDateTime,
         StringCollection,
     }
 
@@ -45,7 +46,11 @@ namespace DataModelGenerator
         public string DataType { get; set; }
 
         public bool HasDefault => Default != "-";
-        public string DefaultValue => DataType == "string" ? $"\"{Default}\"" : Default;
+        public string DefaultValue =>
+            HasDefault ?
+                (DataType == "string" ? $"\"{Default}\"" : Default)
+                : "null";
+
 
         public string PashuaName
         {
@@ -63,10 +68,11 @@ namespace DataModelGenerator
                 return DataType switch
                 {
                     "string" => PropertyType.String,
-                    "double" => PropertyType.Double,
+                    "double?" => PropertyType.NullableDouble,
+                    "int?" => PropertyType.NullableInt,
                     "int" => PropertyType.Int,
                     "bool" => PropertyType.Bool,
-                    "DateTime" => PropertyType.DateTime,
+                    "DateTime?" => PropertyType.NullableDateTime,
                     "TimeSpan?" => PropertyType.NullableTimeSpan,
                     "IEnumerable<string>" => PropertyType.StringCollection,
                     _ => PropertyType.Enum,
@@ -184,7 +190,9 @@ namespace DataModelGenerator
                 }
                 else
                 {
-                    if (property.HasDefault)
+                    var checkForDefault = !property.Required;
+
+                    if (checkForDefault)
                     {
                         file.Line($"if ({property.Name} != {property.DefaultValue})")
                             .OpenParen();
@@ -193,16 +201,16 @@ namespace DataModelGenerator
                     var value = property.Type switch
                     {
                         PropertyType.Bool => $"({property.Name} ? 1 : 0)",
-                        PropertyType.DateTime => property.Name +".ToString(\"yyyy-mm-dd hh:mm\")",
-                        PropertyType.Double => property.Name +":N2",
-                        PropertyType.NullableTimeSpan =>  $"(int?){property.Name}?.TotalSeconds",
+                        PropertyType.NullableDateTime => property.Name +".ToString(\"yyyy-mm-dd hh:mm\")",
+                        PropertyType.NullableDouble => property.Name +":N2",
+                        PropertyType.NullableTimeSpan =>  $"(int){property.Name}.TotalSeconds",
                         PropertyType.Enum => $"{property.Name}.ToString().ToLowerInvariant()",
                         _ => property.Name,
                     };
 
                     file.Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{{value}}};\");");
 
-                    if (property.HasDefault)
+                    if (checkForDefault)
                     {
                         file.CloseParen();
                     }
@@ -232,7 +240,7 @@ namespace DataModelGenerator
         private static void WriteUsings(Control control, IndentedWriter file)
         {
             var needsSystem =
-                control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
+                control.Properties.Any(p => p.DataType.StartsWith("NullableDateTime") || p.DataType.StartsWith("TimeSpan"));
             var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
             if (needsSystem)
             {
