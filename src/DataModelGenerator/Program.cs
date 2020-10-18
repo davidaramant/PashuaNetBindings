@@ -201,9 +201,9 @@ namespace DataModelGenerator
                     var value = property.Type switch
                     {
                         PropertyType.Bool => $"({property.Name} ? 1 : 0)",
-                        PropertyType.NullableDateTime => property.Name +".ToString(\"yyyy-mm-dd hh:mm\")",
+                        PropertyType.NullableDateTime => property.Name +"?.ToString(\"yyyy-mm-dd hh:mm\")",
                         PropertyType.NullableDouble => property.Name +":N2",
-                        PropertyType.NullableTimeSpan =>  $"(int){property.Name}.TotalSeconds",
+                        PropertyType.NullableTimeSpan =>  $"(int){property.Name}?.TotalSeconds",
                         PropertyType.Enum => $"{property.Name}.ToString().ToLowerInvariant()",
                         _ => property.Name,
                     };
@@ -240,7 +240,7 @@ namespace DataModelGenerator
         private static void WriteUsings(Control control, IndentedWriter file)
         {
             var needsSystem =
-                control.Properties.Any(p => p.DataType.StartsWith("NullableDateTime") || p.DataType.StartsWith("TimeSpan"));
+                control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
             var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
             if (needsSystem)
             {
