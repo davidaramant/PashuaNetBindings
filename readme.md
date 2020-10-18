@@ -1,7 +1,6 @@
 # Pashua .NET Bindings
 
 TODO:
-* Slapping on "Control" at the end of the class name (could possibly using ActualName thing)
 * Magic to parse output
 
 MANUAL TODOS:

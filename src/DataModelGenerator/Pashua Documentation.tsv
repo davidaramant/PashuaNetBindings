@@ -48,8 +48,8 @@ RelY		Relative vertical distance to the next element below (“relative” means
 date		The date element lets the user choose a date, a time or both. It can be displayed in textual or graphical style.					
 label		Sets the date picker’s label (displayed above)		No	-	string	
 textual		Should the textual display style be used instead of the graphical style?		No	false	bool	
-date		Should the user be able to chose a date?		No	true	bool	
-time		Should the user be able to chose the time?		No	false	bool	
+AllowSettingDate	date	Should the user be able to chose a date?		No	true	bool	
+AllowSettingTime	time	Should the user be able to chose the time?		No	false	bool	
 default		Default date and/or time that should be selected when the dialog is opened. 		No	-	DateTime?	The only string format that is guaranteed to work is “yyyy-mm-dd [hh:mm]”, for instance “2011-11-29 12:34” or “2011-11-29”. Other string formats such as “12/24/2004”, “next wednesday” or “tomorrow” may work, too.
 x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int?	
 y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int?	
@@ -141,7 +141,7 @@ text		This element displays multi-line, wrapping text. 	The width of the element
 label		Creates a label above this element		No	-	string	
 width		Sets the width of the text (in pixels)		No	280	int	
 tooltip		String to use as tooltip for the button. Use \n to insert a linebreak.		No	-	string	
-text		The text to display. You can use the string [return] to insert a linebreak.		Yes	-	string	
+default		The text to display. You can use the string [return] to insert a linebreak.		Yes	-	string	
 x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int?	
 y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int?	
 RelX		Horizontal offset, relative to the position the element would have if RelX was not used (e.g.: RelX specifies the distance from the left window border). Any integer can be used as RelX value.		No	0	int	

@@ -14,7 +14,7 @@ namespace DataModelGenerator
         public string Remarks { get; set; }
         public List<Property> Properties { get; } = new List<Property>();
 
-        public string ClassName => Name + "Control";
+        public string ClassName => Name;
         public string FileName => ClassName + ".cs";
 
         public bool IsWindow => Name.ToLowerInvariant() == "window";
