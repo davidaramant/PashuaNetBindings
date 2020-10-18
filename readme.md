@@ -2,7 +2,6 @@
 
 TODO:
 * Slapping on "Control" at the end of the class name (could possibly using ActualName thing)
-* Base class needed?
 * Magic to parse output
 
 MANUAL TODOS:

@@ -148,8 +148,10 @@ namespace DataModelGenerator
 
                 WriteUsings(control, file);
 
+                file.Line("namespace Pashua").OpenParen();
+
                 WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed class {control.ClassName} : Backend.BaseControl").OpenParen();
+                file.Line($"public sealed class {control.ClassName} : IPashuaControl").OpenParen();
 
                 WriteProperties(control, file);
                 WriteWriteToMethod(file, control);
@@ -161,8 +163,13 @@ namespace DataModelGenerator
 
         private static void WriteWriteToMethod(IndentedWriter file, Control control)
         {
-            file.Line("/// <summary>").Line("/// Writes the control script to the given writer.").Line("/// </summary>");
-            file.Line("public void WriteTo(System.IO.StreamWriter writer)").OpenParen();
+            file
+                .Line("/// <summary>")
+                .Line("/// Writes the control script to the given writer.")
+                .Line("/// </summary>")
+                .Line("/// <exception cref=\"PashuaControlSetupException\">Thrown if the control was not configured correctly.</exception>")
+                .Line("public void WriteTo(StreamWriter writer)")
+                .OpenParen();
 
             if (!control.IsWindow)
             {
@@ -252,12 +259,9 @@ namespace DataModelGenerator
                 file.Line("using System.Collections.Generic;");
             }
 
-            if (needsSystem && needsCollections)
-            {
-                file.Line();
-            }
+            file.Line("using System.IO;");
 
-            file.Line("namespace Pashua").OpenParen();
+            file.Line();
         }
 
         private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)
