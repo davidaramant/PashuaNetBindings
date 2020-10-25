@@ -204,8 +204,16 @@ namespace DataModelGenerator
 
                     if (checkForDefault)
                     {
-                        file.Line($"if ({property.Name} != {property.DefaultValue})")
-                            .OpenParen();
+                        if (property.Type == PropertyType.String && !property.HasDefault)
+                        {
+                            file.Line($"if (!string.IsNullOrWhiteSpace({property.Name}))");
+                        }
+                        else
+                        {
+                            file.Line($"if ({property.Name} != {property.DefaultValue})");
+                        }
+
+                        file.OpenParen();
                     }
 
                     var value = property.Type switch

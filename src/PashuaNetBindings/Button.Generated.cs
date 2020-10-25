@@ -69,7 +69,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.disabled = {(Disabled ? 1 : 0)};");
             }
-            if (Tooltip != null)
+            if (!string.IsNullOrWhiteSpace(Tooltip))
             {
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }

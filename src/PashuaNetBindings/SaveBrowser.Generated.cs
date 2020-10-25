@@ -82,7 +82,7 @@ namespace Pashua
 
             writer.WriteLine($"{Id}.type = savebrowser");
             WriteSpecialProperties(writer);
-            if (Label != null)
+            if (!string.IsNullOrWhiteSpace(Label))
             {
                 writer.WriteLine($"{Id}.label = {Label};");
             }
@@ -90,11 +90,11 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.width = {Width};");
             }
-            if (Default != null)
+            if (!string.IsNullOrWhiteSpace(Default))
             {
                 writer.WriteLine($"{Id}.default = {Default};");
             }
-            if (Filetype != null)
+            if (!string.IsNullOrWhiteSpace(Filetype))
             {
                 writer.WriteLine($"{Id}.filetype = {Filetype};");
             }
@@ -102,7 +102,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.mandatory = {(Mandatory ? 1 : 0)};");
             }
-            if (Placeholder != null)
+            if (!string.IsNullOrWhiteSpace(Placeholder))
             {
                 writer.WriteLine($"{Id}.placeholder = {Placeholder};");
             }

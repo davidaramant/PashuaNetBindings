@@ -97,7 +97,7 @@ namespace Pashua
 
             writer.WriteLine($"{Id}.type = textbox");
             WriteSpecialProperties(writer);
-            if (Label != null)
+            if (!string.IsNullOrWhiteSpace(Label))
             {
                 writer.WriteLine($"{Id}.label = {Label};");
             }
@@ -109,7 +109,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.height = {Height};");
             }
-            if (Default != null)
+            if (!string.IsNullOrWhiteSpace(Default))
             {
                 writer.WriteLine($"{Id}.default = {Default};");
             }
@@ -129,7 +129,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.disabled = {(Disabled ? 1 : 0)};");
             }
-            if (Tooltip != null)
+            if (!string.IsNullOrWhiteSpace(Tooltip))
             {
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }

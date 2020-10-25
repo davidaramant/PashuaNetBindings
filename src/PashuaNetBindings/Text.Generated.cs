@@ -72,7 +72,7 @@ namespace Pashua
 
             writer.WriteLine($"{Id}.type = text");
             WriteSpecialProperties(writer);
-            if (Label != null)
+            if (!string.IsNullOrWhiteSpace(Label))
             {
                 writer.WriteLine($"{Id}.label = {Label};");
             }
@@ -80,7 +80,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.width = {Width};");
             }
-            if (Tooltip != null)
+            if (!string.IsNullOrWhiteSpace(Tooltip))
             {
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }

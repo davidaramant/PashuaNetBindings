@@ -79,7 +79,7 @@ namespace Pashua
             {
                 writer.WriteLine($"*.autoclosetime = {(int)AutoCloseTime?.TotalSeconds};");
             }
-            if (AutoSaveKey != null)
+            if (!string.IsNullOrWhiteSpace(AutoSaveKey))
             {
                 writer.WriteLine($"*.autosavekey = {AutoSaveKey};");
             }

@@ -93,7 +93,7 @@ namespace Pashua
 
             writer.WriteLine($"{Id}.type = combobox");
             WriteSpecialProperties(writer);
-            if (Label != null)
+            if (!string.IsNullOrWhiteSpace(Label))
             {
                 writer.WriteLine($"{Id}.label = {Label};");
             }
@@ -113,7 +113,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.rows = {Rows};");
             }
-            if (Placeholder != null)
+            if (!string.IsNullOrWhiteSpace(Placeholder))
             {
                 writer.WriteLine($"{Id}.placeholder = {Placeholder};");
             }
@@ -121,7 +121,7 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.disabled = {(Disabled ? 1 : 0)};");
             }
-            if (Tooltip != null)
+            if (!string.IsNullOrWhiteSpace(Tooltip))
             {
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }
