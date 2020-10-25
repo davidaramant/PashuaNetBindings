@@ -14,7 +14,10 @@ namespace Pashua
     /// </remarks>
     public sealed partial class CancelButton : IPashuaControl
     {
-        internal string Id => "cancelbutton" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "cancelbutton" + GetHashCode();
 
         /// <summary>
         /// Sets the button title

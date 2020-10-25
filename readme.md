@@ -23,6 +23,7 @@ The name of the element in the Pashua script is completely abstracted.  Once the
 
 
 TODO:
-* Finish readme
+* Finish parsing output and setting results
+* Write test scripts
 * Create NuGet package
-* Magic to parse output
+* Finish readme

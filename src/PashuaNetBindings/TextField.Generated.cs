@@ -9,7 +9,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class TextField : IPashuaControl
     {
-        internal string Id => "textfield" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "textfield" + GetHashCode();
 
         /// <summary>
         /// Creates a label above this element

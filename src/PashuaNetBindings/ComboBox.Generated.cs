@@ -10,7 +10,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class ComboBox : IPashuaControl
     {
-        internal string Id => "combobox" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "combobox" + GetHashCode();
 
         /// <summary>
         /// Creates a label above this element

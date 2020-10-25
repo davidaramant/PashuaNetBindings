@@ -9,6 +9,11 @@ namespace Pashua
     public interface IPashuaControl
     {
         /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        string Id { get; }
+
+        /// <summary>
         /// Serializes the control to the given writer.
         /// </summary>
         /// <param name="writer">The writer to serialize to.</param>

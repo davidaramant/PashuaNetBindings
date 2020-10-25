@@ -11,6 +11,11 @@ namespace Pashua
     public sealed partial class Window : IPashuaControl
     {
         /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "*";
+
+        /// <summary>
         /// If set, the dialog will automatically close after the specified time has passed.
         /// </summary>
         /// <remarks>

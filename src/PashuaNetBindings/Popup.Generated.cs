@@ -9,7 +9,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class Popup : IPashuaControl
     {
-        internal string Id => "popup" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "popup" + GetHashCode();
 
         /// <summary>
         /// Any strings that should appear as an entry in the popup

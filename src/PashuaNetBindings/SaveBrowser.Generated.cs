@@ -13,7 +13,10 @@ namespace Pashua
     /// </remarks>
     public sealed partial class SaveBrowser : IPashuaControl
     {
-        internal string Id => "savebrowser" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "savebrowser" + GetHashCode();
 
         /// <summary>
         /// Creates a label above this element

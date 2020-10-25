@@ -15,7 +15,10 @@ namespace Pashua
     /// </remarks>
     public sealed partial class DefaultButton : IPashuaControl
     {
-        internal string Id => "defaultbutton" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "defaultbutton" + GetHashCode();
 
         /// <summary>
         /// Sets the button title

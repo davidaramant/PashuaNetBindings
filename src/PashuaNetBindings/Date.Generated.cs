@@ -11,7 +11,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class Date : IPashuaControl
     {
-        internal string Id => "date" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "date" + GetHashCode();
 
         /// <summary>
         /// Sets the date picker’s label (displayed above)

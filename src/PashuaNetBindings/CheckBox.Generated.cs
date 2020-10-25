@@ -9,7 +9,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class CheckBox : IPashuaControl
     {
-        internal string Id => "checkbox" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "checkbox" + GetHashCode();
 
         /// <summary>
         /// Creates a label / title next to the checkbox

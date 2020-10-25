@@ -9,7 +9,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class RadioButton : IPashuaControl
     {
-        internal string Id => "radiobutton" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "radiobutton" + GetHashCode();
 
         /// <summary>
         /// Creates a label above this element

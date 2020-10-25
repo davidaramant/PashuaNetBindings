@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Humanizer;
@@ -148,10 +147,11 @@ namespace DataModelGenerator
 
                 WriteUsings(file, control);
 
-                file.Line("namespace Pashua").OpenParen();
-
-                WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed partial class {control.ClassName} : IPashuaControl").OpenParen();
+                file.Line("namespace Pashua")
+                    .OpenParen()
+                    .Documentation(control.Summary, control.Remarks)
+                    .Line($"public sealed partial class {control.ClassName} : IPashuaControl")
+                    .OpenParen();
 
                 WriteProperties(file, control);
                 WriteWriteToMethod(file, control);
@@ -165,9 +165,7 @@ namespace DataModelGenerator
         private static void WriteWriteToMethod(IndentedWriter file, Control control)
         {
             file
-                .Line("/// <summary>")
-                .Line("/// Writes the control script to the given writer.")
-                .Line("/// </summary>")
+                .Documentation("Writes the control script to the given writer.")
                 .Line(
                     "/// <exception cref=\"PashuaScriptException\">Thrown if the control was not configured correctly.</exception>")
                 .Line("public void WriteTo(StreamWriter writer)")
@@ -243,17 +241,18 @@ namespace DataModelGenerator
 
         private static void WriteProperties(IndentedWriter file, Control control)
         {
-            if (!control.IsWindow)
-            {
-                file.Line($"internal string Id => \"{control.PashuaName}\" + GetHashCode();").Line();
-            }
+            file.Documentation("The name of this element in the Pashua script.  Should not be needed outside of the framework.")
+                .Line(control.IsWindow
+                ? $"public string Id => \"*\";"
+                : $"public string Id => \"{control.PashuaName}\" + GetHashCode();")
+                .Line();
 
             foreach (var property in control.Properties)
             {
-                WriteDocumentation(file, property.Summary, property.Remarks, 12);
-                file.Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}" +
-                          (property.HasDefault ? $" = {property.DefaultValue};" : ""));
-                file.Line();
+                file.Documentation(property.Summary, property.Remarks)
+                    .Line($"public {property.DataType} {property.Name.Pascalize()} {{ get; set; }}" +
+                          (property.HasDefault ? $" = {property.DefaultValue};" : ""))
+                    .Line();
             }
         }
 
@@ -275,9 +274,7 @@ namespace DataModelGenerator
 
         private static void WriteValidationMethods(IndentedWriter file, Control control)
         {
-            file.Line("/// <summary>")
-                .Line("/// Returns all the validation errors with the control.")
-                .Line("/// </summary>")
+            file.Documentation("Returns all the validation errors with the control.")
                 .Line("/// <returns>All the issues.</returns>")
                 .Line("public IEnumerable<string> GetValidationIssues()")
                 .OpenParen()
@@ -331,38 +328,6 @@ namespace DataModelGenerator
                 .CloseParen()
                 .Line()
                 .Line("partial void AdditionalValidation(List<string> errors);");
-        }
-
-        private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)
-        {
-            file.Line("/// <summary>");
-            foreach (var sumLine in BreakUpDocumentationLine(summary, indent))
-            {
-                file.Line("/// " + sumLine);
-            }
-            file.Line("/// </summary>");
-            if (!string.IsNullOrWhiteSpace(remarks))
-            {
-                file.Line("/// <remarks>");
-                foreach (var remLine in BreakUpDocumentationLine(remarks, indent))
-                {
-                    file.Line("/// " + remLine);
-                }
-                file.Line("/// </remarks>");
-            }
-        }
-
-        private static IEnumerable<string> BreakUpDocumentationLine(string longLine, int indent)
-        {
-            int maxLength = 120 - indent - 1;
-            while (longLine.Length >= maxLength)
-            {
-                var breakPoint = longLine.LastIndexOf(' ', maxLength);
-                yield return longLine.Substring(0, breakPoint);
-                longLine = longLine.Substring(breakPoint + 1);
-            }
-
-            yield return longLine;
         }
     }
 }

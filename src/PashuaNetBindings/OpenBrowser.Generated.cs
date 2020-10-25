@@ -14,7 +14,10 @@ namespace Pashua
     /// </remarks>
     public sealed partial class OpenBrowser : IPashuaControl
     {
-        internal string Id => "openbrowser" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "openbrowser" + GetHashCode();
 
         /// <summary>
         /// Creates a label above this element

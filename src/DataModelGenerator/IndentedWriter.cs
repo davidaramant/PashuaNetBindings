@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DataModelGenerator
@@ -9,7 +10,8 @@ namespace DataModelGenerator
         public IndentedWriter(StreamWriter writer) => _writer = writer;
 
         public int IndentionLevel { get; private set; }
-        public string CurrentIndent => new string(' ', IndentionLevel*4);
+        public int IndentionCount => IndentionLevel * 4;
+        public string CurrentIndent => new string(' ', IndentionCount);
 
         public IndentedWriter IncreaseIndent()
         {
@@ -38,6 +40,42 @@ namespace DataModelGenerator
         {
             _writer.WriteLine();
             return this;
+        }
+
+        public IndentedWriter Documentation(string summary, string remarks = null)
+        {
+            Line("/// <summary>");
+            foreach (var sumLine in BreakUpDocumentationLine(summary, IndentionCount))
+            {
+                Line("/// " + sumLine);
+            }
+            Line("/// </summary>");
+
+            if (!string.IsNullOrWhiteSpace(remarks))
+            {
+                Line("/// <remarks>");
+                foreach (var remarksLine in BreakUpDocumentationLine(remarks, IndentionCount))
+                {
+                    Line("/// " + remarksLine);
+                }
+                Line("/// </remarks>");
+
+            }
+            
+            return this;
+        }
+
+        private static IEnumerable<string> BreakUpDocumentationLine(string longLine, int indent)
+        {
+            int maxLength = 120 - indent - 1 - 4;
+            while (longLine.Length > maxLength)
+            {
+                var breakPoint = longLine.LastIndexOf(' ', maxLength);
+                yield return longLine.Substring(0, breakPoint);
+                longLine = longLine.Substring(breakPoint + 1);
+            }
+
+            yield return longLine;
         }
 
         public void Dispose()

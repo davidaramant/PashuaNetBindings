@@ -10,7 +10,10 @@ namespace Pashua
     /// </summary>
     public sealed partial class Password : IPashuaControl
     {
-        internal string Id => "password" + GetHashCode();
+        /// <summary>
+        /// The name of this element in the Pashua script.  Should not be needed outside of the framework.
+        /// </summary>
+        public string Id => "password" + GetHashCode();
 
         /// <summary>
         /// Creates a label/title above this element
