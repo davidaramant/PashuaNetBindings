@@ -11,7 +11,7 @@ namespace Pashua
     /// It consists of a textfield, a button and (optionally) a label. The textfield holds the actual element value
     /// (the file path and name), while the button (which is localized) is used to invoke a file selector sheet.
     /// </remarks>
-    public sealed partial class SaveBrowser : PashuaControl
+    public sealed partial class SaveBrowser : IPashuaControl
     {
         internal string Id => "savebrowser" + GetHashCode();
 
@@ -72,7 +72,7 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public override void WriteTo(StreamWriter writer)
+        public void WriteTo(StreamWriter writer)
         {
             var errors = GetValidationIssues();
             if(errors.Any())
@@ -122,5 +122,26 @@ namespace Pashua
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
         }
+
+        /// <summary>
+        /// Returns all the validation errors with the control.
+        /// </summary>
+        /// <returns>All the issues.</returns>
+        public IEnumerable<string> GetValidationIssues()
+        {
+            var errors = new List<string>();
+            if (X < 0)
+            {
+                errors.Add("SaveBrowser X must be greater than or equal to 0.");
+            }
+            if (Y < 0)
+            {
+                errors.Add("SaveBrowser Y must be greater than or equal to 0.");
+            }
+            AdditionalValidation(errors);
+            return errors;
+        }
+
+        partial void AdditionalValidation(List<string> errors);
     }
 }

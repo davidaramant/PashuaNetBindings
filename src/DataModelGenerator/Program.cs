@@ -146,15 +146,17 @@ namespace DataModelGenerator
                 using var writer = new StreamWriter(fs);
                 using var file = new IndentedWriter(writer);
 
-                WriteUsings(control, file);
+                WriteUsings(file, control);
 
                 file.Line("namespace Pashua").OpenParen();
 
                 WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed partial class {control.ClassName} : PashuaControl").OpenParen();
+                file.Line($"public sealed partial class {control.ClassName} : IPashuaControl").OpenParen();
 
-                WriteProperties(control, file);
+                WriteProperties(file, control);
                 WriteWriteToMethod(file, control);
+                file.Line();
+                WriteValidationMethods(file, control);
                 
                 file.CloseParen().CloseParen(); // Close class and namespace
             }
@@ -168,7 +170,7 @@ namespace DataModelGenerator
                 .Line("/// </summary>")
                 .Line(
                     "/// <exception cref=\"PashuaScriptException\">Thrown if the control was not configured correctly.</exception>")
-                .Line("public override void WriteTo(StreamWriter writer)")
+                .Line("public void WriteTo(StreamWriter writer)")
                 .OpenParen()
                 .Line("var errors = GetValidationIssues();")
                 .Line("if(errors.Any())")
@@ -227,7 +229,7 @@ namespace DataModelGenerator
             file.CloseParen(); // Close WriteTo
         }
 
-        private static void WriteProperties(Control control, IndentedWriter file)
+        private static void WriteProperties(IndentedWriter file, Control control)
         {
             if (!control.IsWindow)
             {
@@ -243,7 +245,7 @@ namespace DataModelGenerator
             }
         }
 
-        private static void WriteUsings(Control control, IndentedWriter file)
+        private static void WriteUsings(IndentedWriter file, Control control)
         {
             var needsSystem =
                 control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
@@ -257,6 +259,34 @@ namespace DataModelGenerator
             file.Line("using System.Linq;");
 
             file.Line();
+        }
+
+        private static void WriteValidationMethods(IndentedWriter file, Control control)
+        {
+            file.Line("/// <summary>")
+                .Line("/// Returns all the validation errors with the control.")
+                .Line("/// </summary>")
+                .Line("/// <returns>All the issues.</returns>")
+                .Line("public IEnumerable<string> GetValidationIssues()")
+                .OpenParen()
+                .Line("var errors = new List<string>();");
+
+            foreach (var positive in new[] {"X", "Y"})
+            {
+                if (control.Properties.Any(p => p.Name == positive))
+                {
+                    file.Line($"if ({positive} < 0)")
+                        .OpenParen()
+                        .Line($"errors.Add(\"{control.Name} {positive} must be greater than or equal to 0.\");")
+                        .CloseParen();
+                }
+            }
+
+            file.Line("AdditionalValidation(errors);")
+                .Line("return errors;")
+                .CloseParen()
+                .Line()
+                .Line("partial void AdditionalValidation(List<string> errors);");
         }
 
         private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)

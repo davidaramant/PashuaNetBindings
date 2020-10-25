@@ -7,7 +7,7 @@ namespace Pashua
     /// <summary>
     /// A textfield is a simple, one-line text input field with an optional label displayed above the textfield.
     /// </summary>
-    public sealed partial class TextField : PashuaControl
+    public sealed partial class TextField : IPashuaControl
     {
         internal string Id => "textfield" + GetHashCode();
 
@@ -72,7 +72,7 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public override void WriteTo(StreamWriter writer)
+        public void WriteTo(StreamWriter writer)
         {
             var errors = GetValidationIssues();
             if(errors.Any())
@@ -126,5 +126,26 @@ namespace Pashua
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
         }
+
+        /// <summary>
+        /// Returns all the validation errors with the control.
+        /// </summary>
+        /// <returns>All the issues.</returns>
+        public IEnumerable<string> GetValidationIssues()
+        {
+            var errors = new List<string>();
+            if (X < 0)
+            {
+                errors.Add("TextField X must be greater than or equal to 0.");
+            }
+            if (Y < 0)
+            {
+                errors.Add("TextField Y must be greater than or equal to 0.");
+            }
+            AdditionalValidation(errors);
+            return errors;
+        }
+
+        partial void AdditionalValidation(List<string> errors);
     }
 }
