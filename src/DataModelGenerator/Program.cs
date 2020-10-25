@@ -282,6 +282,14 @@ namespace DataModelGenerator
                 }
             }
 
+            if (control.Properties.Any(p => p.Name == "RelY"))
+            {
+                file.Line($"if (RelY <= -20)")
+                    .OpenParen()
+                    .Line($"errors.Add(\"{control.Name} RelY must be greater than -20.\");")
+                    .CloseParen();
+            }
+
             file.Line("AdditionalValidation(errors);")
                 .Line("return errors;")
                 .CloseParen()

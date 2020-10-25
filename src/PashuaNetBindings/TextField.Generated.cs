@@ -142,6 +142,10 @@ namespace Pashua
             {
                 errors.Add("TextField Y must be greater than or equal to 0.");
             }
+            if (RelY <= -20)
+            {
+                errors.Add("TextField RelY must be greater than -20.");
+            }
             AdditionalValidation(errors);
             return errors;
         }

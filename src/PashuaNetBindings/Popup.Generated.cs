@@ -142,6 +142,10 @@ namespace Pashua
             {
                 errors.Add("Popup Y must be greater than or equal to 0.");
             }
+            if (RelY <= -20)
+            {
+                errors.Add("Popup RelY must be greater than -20.");
+            }
             AdditionalValidation(errors);
             return errors;
         }

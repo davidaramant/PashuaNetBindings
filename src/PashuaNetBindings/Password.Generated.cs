@@ -134,6 +134,10 @@ namespace Pashua
             {
                 errors.Add("Password Y must be greater than or equal to 0.");
             }
+            if (RelY <= -20)
+            {
+                errors.Add("Password RelY must be greater than -20.");
+            }
             AdditionalValidation(errors);
             return errors;
         }

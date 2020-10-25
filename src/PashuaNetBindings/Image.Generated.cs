@@ -172,6 +172,10 @@ namespace Pashua
             {
                 errors.Add("Image Y must be greater than or equal to 0.");
             }
+            if (RelY <= -20)
+            {
+                errors.Add("Image RelY must be greater than -20.");
+            }
             AdditionalValidation(errors);
             return errors;
         }
