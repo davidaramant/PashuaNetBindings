@@ -290,6 +290,14 @@ namespace DataModelGenerator
                     .CloseParen();
             }
 
+            if (control.Properties.Any(p => p.Name == "Label" && p.Required))
+            {
+                file.Line($"if (string.IsNullOrWhiteSpace(Label))")
+                    .OpenParen()
+                    .Line($"errors.Add(\"{control.Name} Label must be set.\");")
+                    .CloseParen();
+            }
+
             file.Line("AdditionalValidation(errors);")
                 .Line("return errors;")
                 .CloseParen()

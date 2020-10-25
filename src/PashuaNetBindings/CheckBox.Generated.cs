@@ -116,6 +116,10 @@ namespace Pashua
             {
                 errors.Add("CheckBox RelY must be greater than -20.");
             }
+            if (string.IsNullOrWhiteSpace(Label))
+            {
+                errors.Add("CheckBox Label must be set.");
+            }
             AdditionalValidation(errors);
             return errors;
         }

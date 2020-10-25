@@ -89,6 +89,10 @@ namespace Pashua
             {
                 errors.Add("Button Y must be greater than or equal to 0.");
             }
+            if (string.IsNullOrWhiteSpace(Label))
+            {
+                errors.Add("Button Label must be set.");
+            }
             AdditionalValidation(errors);
             return errors;
         }
