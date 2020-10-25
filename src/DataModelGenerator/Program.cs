@@ -189,15 +189,7 @@ namespace DataModelGenerator
             {
                 var id = control.IsWindow ? "*" : "{Id}";
 
-                // Very special case
-                if (property.PashuaName == "fonttype")
-                {
-                    file.Line($"if ({property.Name} != {property.DefaultValue})")
-                        .OpenParen()
-                        .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = fixed;\");")
-                        .CloseParen();
-                }
-                else if (property.Type == PropertyType.StringCollection)
+                if (property.Type == PropertyType.StringCollection)
                 {
                     file.Line($"foreach (var option in {property.Name})")
                         .OpenParen()
@@ -220,7 +212,7 @@ namespace DataModelGenerator
                         PropertyType.NullableDateTime => property.Name +"?.ToString(\"yyyy-mm-dd hh:mm\")",
                         PropertyType.NullableDouble => property.Name +":N2",
                         PropertyType.NullableTimeSpan =>  $"(int){property.Name}?.TotalSeconds",
-                        PropertyType.Enum => $"{property.Name}.ToString().ToLowerInvariant()",
+                        PropertyType.Enum => $"SerializeEnum({property.Name})",
                         _ => property.Name,
                     };
 

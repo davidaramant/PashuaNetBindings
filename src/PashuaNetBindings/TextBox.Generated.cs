@@ -115,11 +115,11 @@ namespace Pashua
             }
             if (FontSize != FontSize.Regular)
             {
-                writer.WriteLine($"{Id}.fontsize = {FontSize.ToString().ToLowerInvariant()};");
+                writer.WriteLine($"{Id}.fontsize = {SerializeEnum(FontSize)};");
             }
             if (FontType != FontType.Proportional)
             {
-                writer.WriteLine($"{Id}.fonttype = fixed;");
+                writer.WriteLine($"{Id}.fonttype = {SerializeEnum(FontType)};");
             }
             if (Mandatory != false)
             {

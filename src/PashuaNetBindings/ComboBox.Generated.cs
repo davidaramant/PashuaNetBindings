@@ -103,7 +103,7 @@ namespace Pashua
             }
             if (Completion != AutoCompletionMode.CaseSensitive)
             {
-                writer.WriteLine($"{Id}.completion = {Completion.ToString().ToLowerInvariant()};");
+                writer.WriteLine($"{Id}.completion = {SerializeEnum(Completion)};");
             }
             if (Mandatory != false)
             {
