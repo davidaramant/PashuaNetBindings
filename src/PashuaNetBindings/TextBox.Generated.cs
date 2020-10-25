@@ -172,6 +172,10 @@ namespace Pashua
             {
                 errors.Add("TextBox Width must be greater than or equal to 0.");
             }
+            if (Height < 0)
+            {
+                errors.Add("TextBox Height must be greater than or equal to 0.");
+            }
             if (RelY <= -20)
             {
                 errors.Add("TextBox RelY must be greater than -20.");

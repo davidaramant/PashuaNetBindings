@@ -179,6 +179,18 @@ namespace Pashua
             {
                 errors.Add("Image Width must be greater than or equal to 0.");
             }
+            if (Height < 0)
+            {
+                errors.Add("Image Height must be greater than or equal to 0.");
+            }
+            if (MaxWidth < 0)
+            {
+                errors.Add("Image MaxWidth must be greater than or equal to 0.");
+            }
+            if (MaxHeight < 0)
+            {
+                errors.Add("Image MaxHeight must be greater than or equal to 0.");
+            }
             if (RelY <= -20)
             {
                 errors.Add("Image RelY must be greater than -20.");
