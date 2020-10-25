@@ -271,7 +271,7 @@ namespace DataModelGenerator
                 .OpenParen()
                 .Line("var errors = new List<string>();");
 
-            foreach (var positive in new[] {"X", "Y"})
+            foreach (var positive in new[] {"X", "Y", "Rows"})
             {
                 if (control.Properties.Any(p => p.Name == positive))
                 {
@@ -295,6 +295,14 @@ namespace DataModelGenerator
                 file.Line($"if (string.IsNullOrWhiteSpace(Label))")
                     .OpenParen()
                     .Line($"errors.Add(\"{control.Name} Label must be set.\");")
+                    .CloseParen();
+            }
+
+            if (control.Properties.Any(p => p.Name == "Options" && p.Required))
+            {
+                file.Line($"if (Options == null || Options.Any(string.IsNullOrWhiteSpace))")
+                    .OpenParen()
+                    .Line($"errors.Add(\"{control.Name} Options must be set and have at least one value.  Empty strings are not valid options.\");")
                     .CloseParen();
             }
 

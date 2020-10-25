@@ -161,9 +161,17 @@ namespace Pashua
             {
                 errors.Add("ComboBox Y must be greater than or equal to 0.");
             }
+            if (Rows < 0)
+            {
+                errors.Add("ComboBox Rows must be greater than or equal to 0.");
+            }
             if (RelY <= -20)
             {
                 errors.Add("ComboBox RelY must be greater than -20.");
+            }
+            if (Options == null || Options.Any(string.IsNullOrWhiteSpace))
+            {
+                errors.Add("ComboBox Options must be set and have at least one value.  Empty strings are not valid options.");
             }
             AdditionalValidation(errors);
             return errors;

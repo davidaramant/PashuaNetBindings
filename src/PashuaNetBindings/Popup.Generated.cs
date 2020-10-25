@@ -146,6 +146,10 @@ namespace Pashua
             {
                 errors.Add("Popup RelY must be greater than -20.");
             }
+            if (Options == null || Options.Any(string.IsNullOrWhiteSpace))
+            {
+                errors.Add("Popup Options must be set and have at least one value.  Empty strings are not valid options.");
+            }
             AdditionalValidation(errors);
             return errors;
         }
