@@ -78,7 +78,6 @@ openBrowser		An openbrowser is used for choosing a filesystem path. 	It consists
 label		Creates a label above this element		No	-	string	
 width		Sets the width (overall width of texfield and button)		No	300	int	
 default		Default path		No	-	string	
-FileTypes	filetype	File types that can be selected in the open dialog or dropped onto the textfield. In addition to filename extensions, you can use directory to let the user choose directories.	 If only directory is specified, the user won’t be able to choose any files. If only filename extensions are specified, the user won’t be able to choose directories. If you don’t specify filetype at all, the user will be able to choose anything in the open dialog box.	No	-	IEnumerable<string>	; takes a space-delimited list of filename extensions (such as jpg gif tif etc.)
 mandatory		If set to true, input is mandatory.		No	false	bool	
 placeholder		If present, this string will be as the field’s placeholder string.		No	-	string	
 x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int?	

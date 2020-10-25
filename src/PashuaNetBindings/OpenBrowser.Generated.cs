@@ -32,17 +32,6 @@ namespace Pashua
         public string Default { get; set; }
 
         /// <summary>
-        /// File types that can be selected in the open dialog or dropped onto the textfield. In addition to filename
-        /// extensions, you can use directory to let the user choose directories.
-        /// </summary>
-        /// <remarks>
-        /// If only directory is specified, the user won’t be able to choose any files. If only filename extensions are
-        /// specified, the user won’t be able to choose directories. If you don’t specify filetype at all, the user
-        /// will be able to choose anything in the open dialog box.
-        /// </remarks>
-        public IEnumerable<string> FileTypes { get; set; }
-
-        /// <summary>
         /// If set to true, input is mandatory.
         /// </summary>
         public bool Mandatory { get; set; } = false;
@@ -99,10 +88,6 @@ namespace Pashua
             if (!string.IsNullOrWhiteSpace(Default))
             {
                 writer.WriteLine($"{Id}.default = {Default};");
-            }
-            foreach (var option in FileTypes)
-            {
-                writer.WriteLine($"{Id}.filetype = {option};");
             }
             if (Mandatory != false)
             {
