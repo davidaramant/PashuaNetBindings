@@ -157,6 +157,10 @@ namespace Pashua
             {
                 errors.Add("Popup Options must be set and have at least one value.  Empty strings are not valid options.");
             }
+            else if(!string.IsNullOrWhiteSpace(Default) && !Options.Contains(Default))
+            {
+                errors.Add("Popup Default must be one of the Options.");
+            }
             AdditionalValidation(errors);
             return errors;
         }

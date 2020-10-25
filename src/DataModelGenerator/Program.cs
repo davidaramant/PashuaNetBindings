@@ -296,7 +296,7 @@ namespace DataModelGenerator
 
             if (control.Properties.Any(p => p.Name == "RelY"))
             {
-                file.Line($"if (RelY <= -20)")
+                file.Line("if (RelY <= -20)")
                     .OpenParen()
                     .Line($"errors.Add(\"{control.Name} RelY must be greater than -20.\");")
                     .CloseParen();
@@ -304,18 +304,26 @@ namespace DataModelGenerator
 
             if (control.Properties.Any(p => p.Name == "Label" && p.Required))
             {
-                file.Line($"if (string.IsNullOrWhiteSpace(Label))")
+                file.Line("if (string.IsNullOrWhiteSpace(Label))")
                     .OpenParen()
                     .Line($"errors.Add(\"{control.Name} Label must be set.\");")
                     .CloseParen();
             }
 
-            if (control.Properties.Any(p => p.Name == "Options" && p.Required))
+            if (control.Properties.Any(p => p.Name == "Options" ))
             {
-                file.Line($"if (Options == null || Options.Any(string.IsNullOrWhiteSpace))")
+                file.Line("if (Options == null || Options.Any(string.IsNullOrWhiteSpace))")
                     .OpenParen()
                     .Line($"errors.Add(\"{control.Name} Options must be set and have at least one value.  Empty strings are not valid options.\");")
                     .CloseParen();
+
+                if (control.Properties.Any(p => p.Name == "Default"))
+                {
+                    file.Line("else if(!string.IsNullOrWhiteSpace(Default) && !Options.Contains(Default))")
+                        .OpenParen()
+                        .Line($"errors.Add(\"{control.Name} Default must be one of the Options.\");")
+                        .CloseParen();
+                }
             }
 
             file.Line("AdditionalValidation(errors);")
