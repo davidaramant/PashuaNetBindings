@@ -5,26 +5,26 @@ namespace Pashua
 {
     public sealed partial class Window
     {
-        partial void FindErrors(List<string> validationErrors)
+        public override IEnumerable<string> GetValidationIssues()
         {
             if (AutoCloseTime < TimeSpan.Zero)
             {
-                validationErrors.Add("Window AutoCloseTime must be positive.");
+                yield return "Window AutoCloseTime must be positive.";
             }
 
             if (Transparency < 0 || Transparency > 1)
             {
-                validationErrors.Add("Window Transparency must be between 0 and 1.");
+                yield return "Window Transparency must be between 0 and 1.";
             }
 
             if (X < 0)
             {
-                validationErrors.Add("Window X must be greater than 0.");
+                yield return "Window X must be greater than 0.";
             }
 
             if (Y < 0)
             {
-                validationErrors.Add("Window Y must be greater than 0.");
+                yield return "Window Y must be greater than 0.";
             }
         }
     }

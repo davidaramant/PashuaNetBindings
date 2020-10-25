@@ -151,12 +151,10 @@ namespace DataModelGenerator
                 file.Line("namespace Pashua").OpenParen();
 
                 WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed partial class {control.ClassName} : IPashuaControl").OpenParen();
+                file.Line($"public sealed partial class {control.ClassName} : PashuaControl").OpenParen();
 
                 WriteProperties(control, file);
                 WriteWriteToMethod(file, control);
-                file.Line().Line("partial void FindErrors(List<string> validationErrors);").Line();
-                WriteGetValidationIssues(file);
                 
                 file.CloseParen().CloseParen(); // Close class and namespace
             }
@@ -170,10 +168,9 @@ namespace DataModelGenerator
                 .Line("/// </summary>")
                 .Line(
                     "/// <exception cref=\"PashuaScriptException\">Thrown if the control was not configured correctly.</exception>")
-                .Line("public void WriteTo(StreamWriter writer)")
+                .Line("public override void WriteTo(StreamWriter writer)")
                 .OpenParen()
-                .Line("var errors = new List<string>();")
-                .Line("FindErrors(errors);")
+                .Line("var errors = GetValidationIssues();")
                 .Line("if(errors.Any())")
                 .OpenParen()
                 .Line("throw new PashuaScriptException(errors);")
@@ -260,20 +257,6 @@ namespace DataModelGenerator
             file.Line("using System.Linq;");
 
             file.Line();
-        }
-
-        private static void WriteGetValidationIssues(IndentedWriter file)
-        {
-            file.Line("/// <summary>")
-                .Line("/// Returns all the validation errors with the control.")
-                .Line("/// </summary>")
-                .Line("/// <returns>All the issues.</returns>")
-                .Line("public IEnumerable<string> GetValidationIssues()")
-                .OpenParen()
-                .Line("var errors = new List<string>();")
-                .Line("FindErrors(errors);")
-                .Line("return errors;")
-                .CloseParen();
         }
 
         private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)

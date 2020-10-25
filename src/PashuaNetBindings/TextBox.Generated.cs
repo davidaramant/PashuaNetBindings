@@ -11,7 +11,7 @@ namespace Pashua
     /// The scrollbar will appear automatically if needed. Note: If you have changed the system’s scrollbar behaviour
     /// to display both arrows at both ends (e.g. using TinkerTool), the scrollbar might not appear for small heights.
     /// </remarks>
-    public sealed partial class TextBox : IPashuaControl
+    public sealed partial class TextBox : PashuaControl
     {
         internal string Id => "textbox" + GetHashCode();
 
@@ -87,10 +87,9 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public override void WriteTo(StreamWriter writer)
         {
-            var errors = new List<string>();
-            FindErrors(errors);
+            var errors = GetValidationIssues();
             if(errors.Any())
             {
                 throw new PashuaScriptException(errors);
@@ -149,19 +148,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
-        }
-
-        partial void FindErrors(List<string> validationErrors);
-
-        /// <summary>
-        /// Returns all the validation errors with the control.
-        /// </summary>
-        /// <returns>All the issues.</returns>
-        public IEnumerable<string> GetValidationIssues()
-        {
-            var errors = new List<string>();
-            FindErrors(errors);
-            return errors;
         }
     }
 }

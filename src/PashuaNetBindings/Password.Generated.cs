@@ -8,7 +8,7 @@ namespace Pashua
     /// This element is identical to a textfield, except that it hides whatever is typed into it. Moreover, you can’t
     /// copy or drag text from a password element.
     /// </summary>
-    public sealed partial class Password : IPashuaControl
+    public sealed partial class Password : PashuaControl
     {
         internal string Id => "password" + GetHashCode();
 
@@ -68,10 +68,9 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public override void WriteTo(StreamWriter writer)
         {
-            var errors = new List<string>();
-            FindErrors(errors);
+            var errors = GetValidationIssues();
             if(errors.Any())
             {
                 throw new PashuaScriptException(errors);
@@ -118,19 +117,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
-        }
-
-        partial void FindErrors(List<string> validationErrors);
-
-        /// <summary>
-        /// Returns all the validation errors with the control.
-        /// </summary>
-        /// <returns>All the issues.</returns>
-        public IEnumerable<string> GetValidationIssues()
-        {
-            var errors = new List<string>();
-            FindErrors(errors);
-            return errors;
         }
     }
 }

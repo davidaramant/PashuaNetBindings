@@ -12,7 +12,7 @@ namespace Pashua
     /// (the file path), while the button (which is localized) is used to invoke a file selector sheet. Moreover, a
     /// file can be dragged & dropped onto the textfield.
     /// </remarks>
-    public sealed partial class OpenBrowser : IPashuaControl
+    public sealed partial class OpenBrowser : PashuaControl
     {
         internal string Id => "openbrowser" + GetHashCode();
 
@@ -78,10 +78,9 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public override void WriteTo(StreamWriter writer)
         {
-            var errors = new List<string>();
-            FindErrors(errors);
+            var errors = GetValidationIssues();
             if(errors.Any())
             {
                 throw new PashuaScriptException(errors);
@@ -128,19 +127,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
-        }
-
-        partial void FindErrors(List<string> validationErrors);
-
-        /// <summary>
-        /// Returns all the validation errors with the control.
-        /// </summary>
-        /// <returns>All the issues.</returns>
-        public IEnumerable<string> GetValidationIssues()
-        {
-            var errors = new List<string>();
-            FindErrors(errors);
-            return errors;
         }
     }
 }

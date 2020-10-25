@@ -7,7 +7,7 @@ namespace Pashua
     /// <summary>
     /// Displays a checkbox
     /// </summary>
-    public sealed partial class CheckBox : IPashuaControl
+    public sealed partial class CheckBox : PashuaControl
     {
         internal string Id => "checkbox" + GetHashCode();
 
@@ -57,10 +57,9 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public override void WriteTo(StreamWriter writer)
         {
-            var errors = new List<string>();
-            FindErrors(errors);
+            var errors = GetValidationIssues();
             if(errors.Any())
             {
                 throw new PashuaScriptException(errors);
@@ -96,19 +95,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
-        }
-
-        partial void FindErrors(List<string> validationErrors);
-
-        /// <summary>
-        /// Returns all the validation errors with the control.
-        /// </summary>
-        /// <returns>All the issues.</returns>
-        public IEnumerable<string> GetValidationIssues()
-        {
-            var errors = new List<string>();
-            FindErrors(errors);
-            return errors;
         }
     }
 }

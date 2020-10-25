@@ -12,7 +12,7 @@ namespace Pashua
     /// The cancel button is always positioned to the left of the default button and can not be moved to any other
     /// position.
     /// </remarks>
-    public sealed partial class CancelButton : IPashuaControl
+    public sealed partial class CancelButton : PashuaControl
     {
         internal string Id => "cancelbutton" + GetHashCode();
 
@@ -35,10 +35,9 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public override void WriteTo(StreamWriter writer)
         {
-            var errors = new List<string>();
-            FindErrors(errors);
+            var errors = GetValidationIssues();
             if(errors.Any())
             {
                 throw new PashuaScriptException(errors);
@@ -57,19 +56,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }
-        }
-
-        partial void FindErrors(List<string> validationErrors);
-
-        /// <summary>
-        /// Returns all the validation errors with the control.
-        /// </summary>
-        /// <returns>All the issues.</returns>
-        public IEnumerable<string> GetValidationIssues()
-        {
-            var errors = new List<string>();
-            FindErrors(errors);
-            return errors;
         }
     }
 }
