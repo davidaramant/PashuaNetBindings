@@ -74,6 +74,7 @@ namespace Pashua
                 throw new PashuaScriptException(errors);
             }
 
+            WriteSpecialProperties(writer);
             if (AutoCloseTime != null)
             {
                 writer.WriteLine($"*.autoclosetime = {(int)AutoCloseTime?.TotalSeconds};");
@@ -103,6 +104,8 @@ namespace Pashua
                 writer.WriteLine($"*.y = {Y};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

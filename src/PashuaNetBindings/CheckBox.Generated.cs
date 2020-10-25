@@ -66,6 +66,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = checkbox");
+            WriteSpecialProperties(writer);
             writer.WriteLine($"{Id}.label = {Label};");
             if (Default != false)
             {
@@ -96,6 +97,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

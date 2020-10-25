@@ -48,8 +48,6 @@ RelY		Relative vertical distance to the next element below (“relative” means
 date		The date element lets the user choose a date, a time or both. It can be displayed in textual or graphical style.					
 label		Sets the date picker’s label (displayed above)		No	-	string	
 textual		Should the textual display style be used instead of the graphical style?		No	false	bool	
-AllowSettingDate	date	Should the user be able to chose a date?		No	true	bool	
-AllowSettingTime	time	Should the user be able to chose the time?		No	false	bool	
 default		Default date and/or time that should be selected when the dialog is opened. 		No	-	DateTime?	The only string format that is guaranteed to work is “yyyy-mm-dd [hh:mm]”, for instance “2011-11-29 12:34” or “2011-11-29”. Other string formats such as “12/24/2004”, “next wednesday” or “tomorrow” may work, too.
 x		Absolute horizontal position in the window, measured from the left border of the content area		No	-	int?	
 y		Absolute vertical position in the window, measured from the lower border of the content area		No	-	int?	

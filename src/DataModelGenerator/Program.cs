@@ -185,6 +185,8 @@ namespace DataModelGenerator
                 file.Line($"writer.WriteLine($\"{{Id}}.type = {control.PashuaName}\");");
             }
 
+            file.Line("WriteSpecialProperties(writer);");
+
             foreach (var property in control.Properties)
             {
                 var id = control.IsWindow ? "*" : "{Id}";
@@ -227,6 +229,8 @@ namespace DataModelGenerator
             }
 
             file.CloseParen(); // Close WriteTo
+
+            file.Line().Line("partial void WriteSpecialProperties(StreamWriter writer);");
         }
 
         private static void WriteProperties(IndentedWriter file, Control control)

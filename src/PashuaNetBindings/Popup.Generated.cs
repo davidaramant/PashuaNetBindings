@@ -81,6 +81,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = popup");
+            WriteSpecialProperties(writer);
             foreach (var option in Options)
             {
                 writer.WriteLine($"{Id}.option = {option};");
@@ -126,6 +127,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

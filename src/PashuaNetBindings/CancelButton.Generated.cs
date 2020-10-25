@@ -44,6 +44,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = cancelbutton");
+            WriteSpecialProperties(writer);
             if (Label != null)
             {
                 writer.WriteLine($"{Id}.label = {Label};");
@@ -57,6 +58,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

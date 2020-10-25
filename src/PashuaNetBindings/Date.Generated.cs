@@ -24,16 +24,6 @@ namespace Pashua
         public bool Textual { get; set; } = false;
 
         /// <summary>
-        /// Should the user be able to chose a date?
-        /// </summary>
-        public bool AllowSettingDate { get; set; } = true;
-
-        /// <summary>
-        /// Should the user be able to chose the time?
-        /// </summary>
-        public bool AllowSettingTime { get; set; } = false;
-
-        /// <summary>
         /// Default date and/or time that should be selected when the dialog is opened.
         /// </summary>
         public DateTime? Default { get; set; }
@@ -71,6 +61,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = date");
+            WriteSpecialProperties(writer);
             if (Label != null)
             {
                 writer.WriteLine($"{Id}.label = {Label};");
@@ -78,14 +69,6 @@ namespace Pashua
             if (Textual != false)
             {
                 writer.WriteLine($"{Id}.textual = {(Textual ? 1 : 0)};");
-            }
-            if (AllowSettingDate != true)
-            {
-                writer.WriteLine($"{Id}.date = {(AllowSettingDate ? 1 : 0)};");
-            }
-            if (AllowSettingTime != false)
-            {
-                writer.WriteLine($"{Id}.time = {(AllowSettingTime ? 1 : 0)};");
             }
             if (Default != null)
             {
@@ -108,6 +91,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

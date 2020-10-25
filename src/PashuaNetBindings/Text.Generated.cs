@@ -71,6 +71,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = text");
+            WriteSpecialProperties(writer);
             if (Label != null)
             {
                 writer.WriteLine($"{Id}.label = {Label};");
@@ -101,6 +102,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.rely = {RelY};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

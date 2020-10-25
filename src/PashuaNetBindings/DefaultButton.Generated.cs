@@ -45,6 +45,7 @@ namespace Pashua
             }
 
             writer.WriteLine($"{Id}.type = defaultbutton");
+            WriteSpecialProperties(writer);
             if (Label != "OK")
             {
                 writer.WriteLine($"{Id}.label = {Label};");
@@ -58,6 +59,8 @@ namespace Pashua
                 writer.WriteLine($"{Id}.tooltip = {Tooltip};");
             }
         }
+
+        partial void WriteSpecialProperties(StreamWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.
