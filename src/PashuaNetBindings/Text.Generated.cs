@@ -104,5 +104,16 @@ namespace Pashua
         }
 
         partial void FindErrors(List<string> validationErrors);
+
+        /// <summary>
+        /// Returns all the validation errors with the control.
+        /// </summary>
+        /// <returns>All the issues.</returns>
+        public IEnumerable<string> GetValidationIssues()
+        {
+            var errors = new List<string>();
+            FindErrors(errors);
+            return errors;
+        }
     }
 }

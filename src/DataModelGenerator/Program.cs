@@ -155,7 +155,8 @@ namespace DataModelGenerator
 
                 WriteProperties(control, file);
                 WriteWriteToMethod(file, control);
-                file.Line().Line("partial void FindErrors(List<string> validationErrors);");
+                file.Line().Line("partial void FindErrors(List<string> validationErrors);").Line();
+                WriteGetValidationIssues(file);
                 
                 file.CloseParen().CloseParen(); // Close class and namespace
             }
@@ -259,6 +260,20 @@ namespace DataModelGenerator
             file.Line("using System.Linq;");
 
             file.Line();
+        }
+
+        private static void WriteGetValidationIssues(IndentedWriter file)
+        {
+            file.Line("/// <summary>")
+                .Line("/// Returns all the validation errors with the control.")
+                .Line("/// </summary>")
+                .Line("/// <returns>All the issues.</returns>")
+                .Line("public IEnumerable<string> GetValidationIssues()")
+                .OpenParen()
+                .Line("var errors = new List<string>();")
+                .Line("FindErrors(errors);")
+                .Line("return errors;")
+                .CloseParen();
         }
 
         private static void WriteDocumentation(IndentedWriter file, string summary, string remarks, int indent)

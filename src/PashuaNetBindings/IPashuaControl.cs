@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Pashua
 {
@@ -11,7 +12,13 @@ namespace Pashua
         /// Serializes the control to the given writer.
         /// </summary>
         /// <param name="writer">The writer to serialize to.</param>
-        /// <exception cref="PashuaControlSetupException">Thrown if the control was not configured correctly.</exception>
+        /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
         void WriteTo(StreamWriter writer);
+
+        /// <summary>
+        /// Returns all the validation errors with the control.
+        /// </summary>
+        /// <returns>All the issues.</returns>
+        IEnumerable<string> GetValidationIssues();
     }
 }
