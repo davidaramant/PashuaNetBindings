@@ -144,6 +144,10 @@ namespace Pashua
             {
                 errors.Add("OpenBrowser Y must be greater than or equal to 0.");
             }
+            if (Width < 0)
+            {
+                errors.Add("OpenBrowser Width must be greater than or equal to 0.");
+            }
             if (RelY <= -20)
             {
                 errors.Add("OpenBrowser RelY must be greater than -20.");

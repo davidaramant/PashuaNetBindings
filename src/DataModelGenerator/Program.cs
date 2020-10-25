@@ -271,7 +271,7 @@ namespace DataModelGenerator
                 .OpenParen()
                 .Line("var errors = new List<string>();");
 
-            foreach (var positive in new[] {"X", "Y", "Rows"})
+            foreach (var positive in new[] {"X", "Y", "Rows", "Width"})
             {
                 if (control.Properties.Any(p => p.Name == positive))
                 {

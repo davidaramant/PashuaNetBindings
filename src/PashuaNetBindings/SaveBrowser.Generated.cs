@@ -138,6 +138,10 @@ namespace Pashua
             {
                 errors.Add("SaveBrowser Y must be greater than or equal to 0.");
             }
+            if (Width < 0)
+            {
+                errors.Add("SaveBrowser Width must be greater than or equal to 0.");
+            }
             if (RelY <= -20)
             {
                 errors.Add("SaveBrowser RelY must be greater than -20.");

@@ -29,12 +29,23 @@ namespace Pashua.Tests
         }
 
         [Fact]
-        public void ShouldRequirePositiveNumRows()
+        public void ShouldRequirePositiveRows()
         {
             var comboBox = new ComboBox
             {
                 Options = new []{"value"}, 
                 Rows = -1,
+            };
+            comboBox.GetValidationIssues().Should().HaveCount(1);
+        }
+
+        [Fact]
+        public void ShouldRequirePositiveWidth()
+        {
+            var comboBox = new ComboBox
+            {
+                Options = new []{"value"}, 
+                Width = -1,
             };
             comboBox.GetValidationIssues().Should().HaveCount(1);
         }
