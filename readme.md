@@ -26,4 +26,3 @@ TODO:
 * Finish readme
 * Create NuGet package
 * Magic to parse output
-* Validation of properties when writing
