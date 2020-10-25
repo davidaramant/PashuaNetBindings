@@ -7,7 +7,7 @@ using Humanizer;
 
 namespace DataModelGenerator
 {
-    class Control
+    sealed class Control
     {
         public string Name { get; set; }
         public string Summary { get; set; }
@@ -15,7 +15,7 @@ namespace DataModelGenerator
         public List<Property> Properties { get; } = new List<Property>();
 
         public string ClassName => Name;
-        public string FileName => ClassName + ".cs";
+        public string FileName => ClassName + ".Generated.cs";
 
         public bool IsWindow => Name.ToLowerInvariant() == "window";
 
@@ -35,7 +35,7 @@ namespace DataModelGenerator
         StringCollection,
     }
 
-    class Property
+    sealed class Property
     {
         public string Name { get; set; }
         public string ActualName { get; set; }
@@ -151,12 +151,12 @@ namespace DataModelGenerator
                 file.Line("namespace Pashua").OpenParen();
 
                 WriteDocumentation(file, control.Summary, control.Remarks, 8);
-                file.Line($"public sealed class {control.ClassName} : IPashuaControl").OpenParen();
+                file.Line($"public sealed partial class {control.ClassName} : IPashuaControl").OpenParen();
 
                 WriteProperties(control, file);
                 WriteWriteToMethod(file, control);
-
-
+                file.Line().Line("partial void FindErrors(List<string> validationErrors);");
+                
                 file.CloseParen().CloseParen(); // Close class and namespace
             }
         }
@@ -167,9 +167,18 @@ namespace DataModelGenerator
                 .Line("/// <summary>")
                 .Line("/// Writes the control script to the given writer.")
                 .Line("/// </summary>")
-                .Line("/// <exception cref=\"PashuaControlSetupException\">Thrown if the control was not configured correctly.</exception>")
+                .Line(
+                    "/// <exception cref=\"PashuaScriptException\">Thrown if the control was not configured correctly.</exception>")
                 .Line("public void WriteTo(StreamWriter writer)")
-                .OpenParen();
+                .OpenParen()
+                .Line("var errors = new List<string>();")
+                .Line("FindErrors(errors);")
+                .Line("if(errors.Any())")
+                .OpenParen()
+                .Line("throw new PashuaScriptException(errors);")
+                .CloseParen()
+                .Line();
+
 
             if (!control.IsWindow)
             {
@@ -248,18 +257,14 @@ namespace DataModelGenerator
         {
             var needsSystem =
                 control.Properties.Any(p => p.DataType.StartsWith("DateTime") || p.DataType.StartsWith("TimeSpan"));
-            var needsCollections = control.Properties.Any(p => p.DataType.StartsWith("IEnumerable"));
             if (needsSystem)
             {
                 file.Line("using System;");
             }
 
-            if (needsCollections)
-            {
-                file.Line("using System.Collections.Generic;");
-            }
-
+            file.Line("using System.Collections.Generic;");
             file.Line("using System.IO;");
+            file.Line("using System.Linq;");
 
             file.Line();
         }
