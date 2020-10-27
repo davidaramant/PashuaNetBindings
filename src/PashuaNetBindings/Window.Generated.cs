@@ -71,7 +71,7 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public void WriteTo(TextWriter writer)
         {
             var errors = GetValidationIssues();
             if(errors.Any())
@@ -82,35 +82,35 @@ namespace Pashua
             WriteSpecialProperties(writer);
             if (AutoCloseTime != null)
             {
-                writer.WriteLine($"*.autoclosetime = {(int)AutoCloseTime?.TotalSeconds};");
+                writer.WriteLine($"*.autoclosetime = {(int)AutoCloseTime?.TotalSeconds}");
             }
             if (!string.IsNullOrWhiteSpace(AutoSaveKey))
             {
-                writer.WriteLine($"*.autosavekey = {AutoSaveKey};");
+                writer.WriteLine($"*.autosavekey = {AutoSaveKey}");
             }
             if (Floating != false)
             {
-                writer.WriteLine($"*.floating = {(Floating ? 1 : 0)};");
+                writer.WriteLine($"*.floating = {(Floating ? 1 : 0)}");
             }
             if (Title != "Pashua")
             {
-                writer.WriteLine($"*.title = {Title};");
+                writer.WriteLine($"*.title = {Title}");
             }
             if (Transparency != 1)
             {
-                writer.WriteLine($"*.transparency = {Transparency:N2};");
+                writer.WriteLine($"*.transparency = {Transparency:N2}");
             }
             if (X != null)
             {
-                writer.WriteLine($"*.x = {X};");
+                writer.WriteLine($"*.x = {X}");
             }
             if (Y != null)
             {
-                writer.WriteLine($"*.y = {Y};");
+                writer.WriteLine($"*.y = {Y}");
             }
         }
 
-        partial void WriteSpecialProperties(StreamWriter writer);
+        partial void WriteSpecialProperties(TextWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

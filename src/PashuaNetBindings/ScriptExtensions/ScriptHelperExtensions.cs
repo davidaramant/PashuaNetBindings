@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Pashua.ScriptExtensions
 {
@@ -15,6 +16,19 @@ namespace Pashua.ScriptExtensions
         {
             script.Add(control);
             return control;
+        }
+
+        /// <summary>
+        /// Writes the script to the given writer.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <param name="writer">The output writer.</param>
+        internal static void WriteTo(this IEnumerable<IPashuaControl> script, TextWriter writer)
+        {
+            foreach (var control in script)
+            {
+                control.WriteTo(writer);
+            }
         }
     }
 }

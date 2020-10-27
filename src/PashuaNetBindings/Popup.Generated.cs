@@ -75,7 +75,7 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public void WriteTo(TextWriter writer)
         {
             var errors = GetValidationIssues();
             if(errors.Any())
@@ -87,51 +87,51 @@ namespace Pashua
             WriteSpecialProperties(writer);
             foreach (var option in Options)
             {
-                writer.WriteLine($"{Id}.option = {option};");
+                writer.WriteLine($"{Id}.option = {option}");
             }
             if (!string.IsNullOrWhiteSpace(Default))
             {
-                writer.WriteLine($"{Id}.default = {Default};");
+                writer.WriteLine($"{Id}.default = {Default}");
             }
             if (!string.IsNullOrWhiteSpace(Label))
             {
-                writer.WriteLine($"{Id}.label = {Label};");
+                writer.WriteLine($"{Id}.label = {Label}");
             }
             if (Disabled != false)
             {
-                writer.WriteLine($"{Id}.disabled = {(Disabled ? 1 : 0)};");
+                writer.WriteLine($"{Id}.disabled = {(Disabled ? 1 : 0)}");
             }
             if (!string.IsNullOrWhiteSpace(Tooltip))
             {
-                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")};");
+                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")}");
             }
             if (Mandatory != false)
             {
-                writer.WriteLine($"{Id}.mandatory = {(Mandatory ? 1 : 0)};");
+                writer.WriteLine($"{Id}.mandatory = {(Mandatory ? 1 : 0)}");
             }
             if (Width != 200)
             {
-                writer.WriteLine($"{Id}.width = {Width};");
+                writer.WriteLine($"{Id}.width = {Width}");
             }
             if (X != null)
             {
-                writer.WriteLine($"{Id}.x = {X};");
+                writer.WriteLine($"{Id}.x = {X}");
             }
             if (Y != null)
             {
-                writer.WriteLine($"{Id}.y = {Y};");
+                writer.WriteLine($"{Id}.y = {Y}");
             }
             if (RelX != 0)
             {
-                writer.WriteLine($"{Id}.relx = {RelX};");
+                writer.WriteLine($"{Id}.relx = {RelX}");
             }
             if (RelY != 0)
             {
-                writer.WriteLine($"{Id}.rely = {RelY};");
+                writer.WriteLine($"{Id}.rely = {RelY}");
             }
         }
 
-        partial void WriteSpecialProperties(StreamWriter writer);
+        partial void WriteSpecialProperties(TextWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

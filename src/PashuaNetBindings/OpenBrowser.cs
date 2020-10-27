@@ -29,7 +29,7 @@ namespace Pashua
 
         private bool IsFileTypesSpecified => FileTypes?.Any() ?? false;
 
-        partial void WriteSpecialProperties(StreamWriter writer)
+        partial void WriteSpecialProperties(TextWriter writer)
         {
             if (IsFileTypesSpecified)
             {

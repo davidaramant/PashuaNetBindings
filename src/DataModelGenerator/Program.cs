@@ -168,7 +168,7 @@ namespace DataModelGenerator
                 .Documentation("Writes the control script to the given writer.")
                 .Line(
                     "/// <exception cref=\"PashuaScriptException\">Thrown if the control was not configured correctly.</exception>")
-                .Line("public void WriteTo(StreamWriter writer)")
+                .Line("public void WriteTo(TextWriter writer)")
                 .OpenParen()
                 .Line("var errors = GetValidationIssues();")
                 .Line("if(errors.Any())")
@@ -193,14 +193,14 @@ namespace DataModelGenerator
                 {
                     file.Line($"foreach (var option in {property.Name})")
                         .OpenParen()
-                        .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{option}};\");")
+                        .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{option}}\");")
                         .CloseParen();
                 }
                 else if (property.Name == "Tooltip")
                 {
                     file.Line("if (!string.IsNullOrWhiteSpace(Tooltip))")
                         .OpenParen()
-                        .Line($"writer.WriteLine($\"{id}.tooltip = {{Tooltip.Replace(\"\\n\", \"\\\\n\")}};\");")
+                        .Line($"writer.WriteLine($\"{id}.tooltip = {{Tooltip.Replace(\"\\n\", \"\\\\n\")}}\");")
                         .CloseParen();
                 }
                 else
@@ -231,7 +231,7 @@ namespace DataModelGenerator
                         _ => property.Name,
                     };
 
-                    file.Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{{value}}};\");");
+                    file.Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{{value}}}\");");
 
                     if (checkForDefault)
                     {
@@ -243,7 +243,7 @@ namespace DataModelGenerator
 
             file.CloseParen(); // Close WriteTo
 
-            file.Line().Line("partial void WriteSpecialProperties(StreamWriter writer);");
+            file.Line().Line("partial void WriteSpecialProperties(TextWriter writer);");
         }
 
         private static void WriteProperties(IndentedWriter file, Control control)

@@ -18,7 +18,7 @@ namespace Pashua
         /// </summary>
         /// <param name="writer">The writer to serialize to.</param>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        void WriteTo(StreamWriter writer);
+        void WriteTo(TextWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.

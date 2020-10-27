@@ -27,7 +27,7 @@ namespace Pashua
             };
         }
 
-        partial void WriteSpecialProperties(StreamWriter writer)
+        partial void WriteSpecialProperties(TextWriter writer)
         {
             switch (SelectionMode)
             {
@@ -36,12 +36,12 @@ namespace Pashua
                     break;
 
                 case DateTimeSelection.TimeOnly:
-                    writer.WriteLine($"{Id}.date = 0;");
-                    writer.WriteLine($"{Id}.time = 1;");
+                    writer.WriteLine($"{Id}.date = 0");
+                    writer.WriteLine($"{Id}.time = 1");
                     break;
 
                 case DateTimeSelection.BothTimeAndDate:
-                    writer.WriteLine($"{Id}.time = 1;");
+                    writer.WriteLine($"{Id}.time = 1");
                     break;
 
                 default:

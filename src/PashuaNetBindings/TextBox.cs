@@ -10,11 +10,11 @@ namespace Pashua
         /// </summary>
         public string Default { get; set; }
 
-        partial void WriteSpecialProperties(StreamWriter writer)
+        partial void WriteSpecialProperties(TextWriter writer)
         {
             if (!string.IsNullOrWhiteSpace(Default))
             {
-                writer.WriteLine($"{Id}.default = {Default.Replace("\n","[return]")};");
+                writer.WriteLine($"{Id}.default = {Default.Replace("\n","[return]")}");
             }
         }
 

@@ -100,7 +100,7 @@ namespace Pashua
         /// Writes the control script to the given writer.
         /// </summary>
         /// <exception cref="PashuaScriptException">Thrown if the control was not configured correctly.</exception>
-        public void WriteTo(StreamWriter writer)
+        public void WriteTo(TextWriter writer)
         {
             var errors = GetValidationIssues();
             if(errors.Any())
@@ -112,56 +112,56 @@ namespace Pashua
             WriteSpecialProperties(writer);
             if (!string.IsNullOrWhiteSpace(Label))
             {
-                writer.WriteLine($"{Id}.label = {Label};");
+                writer.WriteLine($"{Id}.label = {Label}");
             }
-            writer.WriteLine($"{Id}.path = {Path};");
+            writer.WriteLine($"{Id}.path = {Path}");
             if (Border != false)
             {
-                writer.WriteLine($"{Id}.border = {(Border ? 1 : 0)};");
+                writer.WriteLine($"{Id}.border = {(Border ? 1 : 0)}");
             }
             if (Width != null)
             {
-                writer.WriteLine($"{Id}.width = {Width};");
+                writer.WriteLine($"{Id}.width = {Width}");
             }
             if (Height != null)
             {
-                writer.WriteLine($"{Id}.height = {Height};");
+                writer.WriteLine($"{Id}.height = {Height}");
             }
             if (MaxWidth != null)
             {
-                writer.WriteLine($"{Id}.maxwidth = {MaxWidth};");
+                writer.WriteLine($"{Id}.maxwidth = {MaxWidth}");
             }
             if (MaxHeight != null)
             {
-                writer.WriteLine($"{Id}.maxheight = {MaxHeight};");
+                writer.WriteLine($"{Id}.maxheight = {MaxHeight}");
             }
             if (Upscale != false)
             {
-                writer.WriteLine($"{Id}.upscale = {(Upscale ? 1 : 0)};");
+                writer.WriteLine($"{Id}.upscale = {(Upscale ? 1 : 0)}");
             }
             if (!string.IsNullOrWhiteSpace(Tooltip))
             {
-                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")};");
+                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")}");
             }
             if (X != null)
             {
-                writer.WriteLine($"{Id}.x = {X};");
+                writer.WriteLine($"{Id}.x = {X}");
             }
             if (Y != null)
             {
-                writer.WriteLine($"{Id}.y = {Y};");
+                writer.WriteLine($"{Id}.y = {Y}");
             }
             if (RelX != 0)
             {
-                writer.WriteLine($"{Id}.relx = {RelX};");
+                writer.WriteLine($"{Id}.relx = {RelX}");
             }
             if (RelY != 0)
             {
-                writer.WriteLine($"{Id}.rely = {RelY};");
+                writer.WriteLine($"{Id}.rely = {RelY}");
             }
         }
 
-        partial void WriteSpecialProperties(StreamWriter writer);
+        partial void WriteSpecialProperties(TextWriter writer);
 
         /// <summary>
         /// Returns all the validation errors with the control.
