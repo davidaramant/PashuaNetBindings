@@ -54,7 +54,7 @@ namespace PashuaNetBindings.Demo
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
             var ok = script.AddAndReturn(new DefaultButton { Label = "Show Page" });
 
-            Script.Run(script);
+            script.Run();
 
             if (cancel.WasClicked)
             {
@@ -71,14 +71,14 @@ namespace PashuaNetBindings.Demo
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Button Demos"},
-                new Text { Label = "Various button functionality."},
+                new Text { Default = "Various button functionality."},
                 new Button {Label = "Has Tooltip", Tooltip = "Multiline\nTooltip"},
                 new Button { Label="Disabled", Disabled = true},
             };
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            Script.Run(script);
+            script.Run();
 
             return !cancel.WasClicked;
         }
