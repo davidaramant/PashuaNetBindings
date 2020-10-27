@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Pashua.ScriptExtensions;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Text;
-using Pashua.ScriptExtensions;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -13,8 +13,9 @@ namespace Pashua
         /// Constructs a new instance.
         /// </summary>
         /// <param name="errors">The validation errors.</param>
-        public PashuaScriptException(IEnumerable<string> errors) 
-            : base("The following errors were found in setting up the script:" + errors.Select(e=>$"\n* {e}"))
+        public PashuaScriptException(IEnumerable<string> errors)
+            : base("The following errors were found in setting up the script:" + 
+                   string.Join("", errors.Select(e => $"\n * {e}")))
         {
         }
     }
