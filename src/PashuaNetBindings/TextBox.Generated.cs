@@ -34,11 +34,6 @@ namespace Pashua
         public int Height { get; set; } = 52;
 
         /// <summary>
-        /// Sets the initial contents. You can use the string [return] to insert a linebreak.
-        /// </summary>
-        public string Default { get; set; }
-
-        /// <summary>
         /// Size of the text inside the textbox. There are three sizes available, which conform to the system’s
         /// standard sizes: regular, small, or mini.
         /// </summary>
@@ -60,7 +55,7 @@ namespace Pashua
         public bool Disabled { get; set; } = false;
 
         /// <summary>
-        /// String to use as tooltip for the button. Use \n to insert a linebreak.
+        /// String to use as tooltip for the button. Newlines are automatically escaped.
         /// </summary>
         public string Tooltip { get; set; }
 
@@ -112,10 +107,6 @@ namespace Pashua
             {
                 writer.WriteLine($"{Id}.height = {Height};");
             }
-            if (!string.IsNullOrWhiteSpace(Default))
-            {
-                writer.WriteLine($"{Id}.default = {Default};");
-            }
             if (FontSize != FontSize.Regular)
             {
                 writer.WriteLine($"{Id}.fontsize = {SerializeEnum(FontSize)};");
@@ -134,7 +125,7 @@ namespace Pashua
             }
             if (!string.IsNullOrWhiteSpace(Tooltip))
             {
-                writer.WriteLine($"{Id}.tooltip = {Tooltip};");
+                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")};");
             }
             if (X != null)
             {

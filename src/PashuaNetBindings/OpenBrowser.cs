@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Pashua
 {
-    public sealed partial class OpenBrowser
+    public sealed partial class OpenBrowser: IHaveResults
     {
         /// <summary>
         /// File types that can be selected in the open dialog or dropped onto the textfield. In addition to filename
@@ -16,6 +16,16 @@ namespace Pashua
         /// will be able to choose anything in the open dialog box.
         /// </remarks>
         public IEnumerable<string> FileTypes { get; set; }
+        
+        /// <summary>
+        /// The path the user selected. Set after the script is completed.
+        /// </summary>
+        public string SelectedPath { get; private set; }
+        
+        void IHaveResults.SetResult(string result)
+        {
+            SelectedPath = result;
+        }
 
         private bool IsFileTypesSpecified => FileTypes?.Any() ?? false;
 

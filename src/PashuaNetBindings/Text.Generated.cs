@@ -30,14 +30,9 @@ namespace Pashua
         public int Width { get; set; } = 280;
 
         /// <summary>
-        /// String to use as tooltip for the button. Use \n to insert a linebreak.
+        /// String to use as tooltip for the button. Newlines are automatically escaped.
         /// </summary>
         public string Tooltip { get; set; }
-
-        /// <summary>
-        /// The text to display. You can use the string [return] to insert a linebreak.
-        /// </summary>
-        public string Default { get; set; }
 
         /// <summary>
         /// Absolute horizontal position in the window, measured from the left border of the content area
@@ -85,9 +80,8 @@ namespace Pashua
             }
             if (!string.IsNullOrWhiteSpace(Tooltip))
             {
-                writer.WriteLine($"{Id}.tooltip = {Tooltip};");
+                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")};");
             }
-            writer.WriteLine($"{Id}.default = {Default};");
             if (X != null)
             {
                 writer.WriteLine($"{Id}.x = {X};");

@@ -70,7 +70,7 @@ namespace Pashua
         public bool Upscale { get; set; } = false;
 
         /// <summary>
-        /// String to use as tooltip for the button. Use \n to insert a linebreak.
+        /// String to use as tooltip for the button. Newlines are automatically escaped.
         /// </summary>
         public string Tooltip { get; set; }
 
@@ -141,7 +141,7 @@ namespace Pashua
             }
             if (!string.IsNullOrWhiteSpace(Tooltip))
             {
-                writer.WriteLine($"{Id}.tooltip = {Tooltip};");
+                writer.WriteLine($"{Id}.tooltip = {Tooltip.Replace("\n", "\\n")};");
             }
             if (X != null)
             {

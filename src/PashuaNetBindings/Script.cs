@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Pashua
 {
@@ -19,7 +20,13 @@ namespace Pashua
         /// <exception cref="PashuaScriptException">Thrown if there was an error in the script.</exception>
         public static void Run(IEnumerable<IPashuaControl> script, string customPashuaPath = null)
         {
-            var elementLookup = script.ToDictionary(c => c.Id, c=>c);
+            // Enumerate the script to avoid any weird issues with lazy sequences
+            var scriptCopy = script.ToArray();
+
+            var elementWithResultLookup = 
+                scriptCopy
+                    .OfType<IHaveResults>()
+                    .ToDictionary(c => c.Id, c=>c);
 
             var startInfo = new ProcessStartInfo
             {
@@ -33,7 +40,7 @@ namespace Pashua
 
             using var process = Process.Start(startInfo);
 
-            foreach (var control in script)
+            foreach (var control in scriptCopy)
             {
                 control.WriteTo(process.StandardInput);
             }
@@ -41,9 +48,10 @@ namespace Pashua
             process.StandardInput.Close();
             process.WaitForExit();
 
-            var results = ParseResults(process.StandardOutput);
-
-            // TODO: Use elementLookup together with results
+            foreach(var (id,value) in GetResultValues(process.StandardOutput))
+            {
+                elementWithResultLookup[id].SetResult(value);
+            }
         }
 
         private static string GetPashuaPath(string customPashuaPath) => 
@@ -55,20 +63,17 @@ namespace Pashua
                     "MacOS",
                     "Pashua");
 
-        private static Dictionary<string, string> ParseResults(StreamReader reader)
+        private static IEnumerable<(string id, string value)> GetResultValues(StreamReader reader)
         {
-            var results = new Dictionary<string, string>();
             string line;
             while ((line = reader.ReadLine()) != null)
             {
                 if (!string.IsNullOrWhiteSpace(line))
                 {
                     var parts = line.Split('=');
-                    results.Add(parts[0], parts[1]);
+                    yield return (parts[0], parts[1]);
                 }
             }
-
-            return results;
         }
     }
 }

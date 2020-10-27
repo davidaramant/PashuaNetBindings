@@ -196,6 +196,13 @@ namespace DataModelGenerator
                         .Line($"writer.WriteLine($\"{id}.{property.PashuaName} = {{option}};\");")
                         .CloseParen();
                 }
+                else if (property.Name == "Tooltip")
+                {
+                    file.Line("if (!string.IsNullOrWhiteSpace(Tooltip))")
+                        .OpenParen()
+                        .Line($"writer.WriteLine($\"{id}.tooltip = {{Tooltip.Replace(\"\\n\", \"\\\\n\")}};\");")
+                        .CloseParen();
+                }
                 else
                 {
                     var checkForDefault = !property.Required;
