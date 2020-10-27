@@ -44,7 +44,10 @@ namespace PashuaNetBindings.Demo
             var pageOptions = ((Page[])Enum.GetValues(typeof(Page))).Where(p => p != Page.DemoOverview)
                 .Select(p => p.ToString());
 
-            var script = new List<IPashuaControl>();
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Control Demos" }
+            };
             var option = script.AddAndReturn(
                 new ComboBox
                 {
@@ -52,7 +55,7 @@ namespace PashuaNetBindings.Demo
                     Options = pageOptions,
                 });
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
-            var ok = script.AddAndReturn(new DefaultButton { Label = "Show Page" });
+            var ok = script.AddAndReturn(new DefaultButton { Label = "Show Selected Page" });
 
             script.Run();
 
@@ -72,8 +75,9 @@ namespace PashuaNetBindings.Demo
             {
                 new Window { Title = "Button Demos"},
                 new Text { Default = "Various button functionality."},
-                new Button {Label = "Has Tooltip", Tooltip = "Multiline\nTooltip"},
-                new Button { Label="Disabled", Disabled = true},
+                new Button { Label = "Has Tooltip", Tooltip = "Multiline\nTooltip"},
+                new Button { Label ="Disabled", Disabled = true},
+                new DefaultButton { Label = "Return to Demo List" },
             };
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
