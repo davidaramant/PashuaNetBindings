@@ -17,11 +17,18 @@ namespace PashuaNetBindings.Demo
 
                 lastOutput = page switch
                 {
-                    Page.Buttons => ShowButtonDemo(),
-                    Page.CheckBoxes => ShowCheckBoxDemo(),
-                    Page.ComboBoxes => ShowComboBoxDemo(),
-                    Page.Dates => ShowDateDemos(),
-                    Page.Images => ShowImageDemos(),
+                    Page.Button => ShowButtonDemo(),
+                    Page.CheckBox => ShowCheckBoxDemo(),
+                    Page.ComboBox => ShowComboBoxDemo(),
+                    Page.Date => ShowDateDemos(),
+                    Page.Image => ShowImageDemos(),
+                    Page.OpenBrowser => ShowOpenBrowserDemos(),
+                    Page.Password => ShowPasswordDemos(),
+                    Page.Popup => ShowPopupDemos(),
+                    Page.SaveBrowser => ShowSaveBrowserDemos(),
+                    Page.Text => ShowTextDemos(),
+                    Page.TextBox => ShowTextBoxDemos(),
+                    Page.TextField => ShowTextFieldDemos(),
                     _ => null
                 };
             }
@@ -29,21 +36,29 @@ namespace PashuaNetBindings.Demo
 
         enum Page
         {
-            Buttons,
-            CheckBoxes,
-            ComboBoxes,
-            Dates,
-            Images,
+            Button,
+            CheckBox,
+            ComboBox,
+            Date,
+            Image,
+            OpenBrowser,
+            Password,
+            Popup,
+            SaveBrowser,
+            Text,
+            TextBox,
+            TextField,
         }
 
         static Page? ShowDemoSelection(string lastOutput)
         {
             var script = new List<IPashuaControl>
             {
-                new Window { Title = "Control Demos" }
+                new Window { Title = "Control Demos" },
+                new Text { Default = "This page also serves as the RadioButton demo" }
             };
             var option = script.AddAndReturn(
-                new ComboBox
+                new RadioButton
                 {
                     Label = "Select demo page to view:",
                     Options = Enum.GetNames(typeof(Page)),
@@ -218,12 +233,204 @@ namespace PashuaNetBindings.Demo
                     MaxWidth = 10,
                 }
             };
-            
+
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.Run();
 
             return cancel.WasClicked ? null : "";
+        }
+
+        static string ShowOpenBrowserDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "OpenBrowser Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new OpenBrowser
+                {
+                    Label = "PNGs only",
+                    Default = "test.png",
+                    FileTypes = new []{"png"},
+                },
+                new OpenBrowser
+                {
+                    Label = "Directories",
+                    FileTypes = new []{"directory"},
+                },
+            };
+            var realValue = script.AddAndReturn(new OpenBrowser
+            {
+                Label = "Will be returned",
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.SelectedPath;
+        }
+
+        static string ShowPasswordDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Password Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new Password
+                {
+                    Label = "With default",
+                    Default = "password1",
+                },
+                new Password
+                {
+                    Label = "Disabled",
+                    Disabled = true,
+                },
+            };
+            var realValue = script.AddAndReturn(new Password
+            {
+                Label = "Will be returned",
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.EnteredText;
+        }
+
+        static string ShowPopupDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Popup Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new Popup
+                {
+                    Label = "With default",
+                    Default = "A",
+                    Options = new []{"A","B","C"}
+                },
+            };
+            var realValue = script.AddAndReturn(new Popup
+            {
+                Label = "Will be returned",
+                Options = new[] { "A", "B", "C" }
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.SelectedOption;
+        }
+
+        static string ShowSaveBrowserDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "SaveBrowser Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new SaveBrowser
+                {
+                    Label = "PNGs only",
+                    Default = "test.png",
+                    Filetype = "png"
+                },
+            };
+            var realValue = script.AddAndReturn(new SaveBrowser
+            {
+                Label = "Will be returned",
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.SelectedPath;
+        }
+
+        static string ShowTextDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Text Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new Text
+                {
+                    Label = "This is a label, which is different than the main text",
+                    Default = "The text\ncan\nhave\nnewlines",
+                },
+            };
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : string.Empty;
+        }
+
+        static string ShowTextBoxDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "TextBox Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new TextBox
+                {
+                    Label = "With default & small text",
+                    Default = "default text\nwhich can be multiple lines",
+                    FontSize = FontSize.Small,
+                },
+                new TextBox
+                {
+                    Label = "Mini, MonoType, Disabled",
+                    FontSize = FontSize.Mini,
+                    FontType = FontType.Monospace,
+                    Disabled = true,
+                    Default = "Here is some text to see how it looks",
+                },
+            };
+            var realValue = script.AddAndReturn(new TextBox
+            {
+                Label = "Will be returned",
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.EnteredText;
+        }
+
+        static string ShowTextFieldDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "TextField Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new TextField
+                {
+                    Label = "With default",
+                    Default = "value",
+                },
+                new TextField
+                {
+                    Label = "Disabled",
+                    Disabled = true,
+                },
+            };
+            var realValue = script.AddAndReturn(new TextField
+            {
+                Label = "Will be returned",
+            });
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : realValue.EnteredText;
         }
     }
 }
