@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Pashua;
 using Pashua.ScriptExtensions;
 
@@ -8,42 +7,33 @@ namespace PashuaNetBindings.Demo
 {
     internal class Program
     {
-        private const bool ShouldContinue = true;
-
         private static void Main(string[] args)
         {
-            Page? page = Page.DemoOverview;
+            string lastOutput = string.Empty;
 
-            Page? ShowDemoPage(Func<bool> showPage)
+            while (lastOutput != null)
             {
-                return showPage() == ShouldContinue ? (Page?)Page.DemoOverview : null;
-            }
+                Page? page = ShowDemoSelection(lastOutput);
 
-            while (page.HasValue)
-            {
-                switch (page)
+                lastOutput = page switch
                 {
-                    case Page.DemoOverview:
-                        page = ShowDemoSelection();
-                        break;
-                    case Page.Buttons:
-                        page = ShowDemoPage(ShowButtons);
-                        break;
-                }
+                    Page.Buttons => ShowButtonDemo(),
+                    Page.CheckBoxes => ShowCheckBoxDemo(),
+                    Page.ComboBoxes => ShowComboBoxDemo(),
+                    _ => null
+                };
             }
         }
 
         enum Page
         {
-            DemoOverview,
             Buttons,
+            CheckBoxes,
+            ComboBoxes,
         }
 
-        static Page? ShowDemoSelection()
+        static Page? ShowDemoSelection(string lastOutput)
         {
-            var pageOptions = ((Page[])Enum.GetValues(typeof(Page))).Where(p => p != Page.DemoOverview)
-                .Select(p => p.ToString());
-
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Control Demos" }
@@ -52,24 +42,26 @@ namespace PashuaNetBindings.Demo
                 new ComboBox
                 {
                     Label = "Select demo page to view:",
-                    Options = pageOptions,
+                    Options = Enum.GetNames(typeof(Page)),
                 });
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
-            var ok = script.AddAndReturn(new DefaultButton { Label = "Show Selected Page" });
+            script.Add(new DefaultButton { Label = "Show Selected Page" });
+
+            if (!string.IsNullOrWhiteSpace(lastOutput))
+            {
+                script.Add(new Text
+                {
+                    Label = "Output from last demo page:",
+                    Default = lastOutput,
+                });
+            }
 
             script.Run();
 
-            if (cancel.WasClicked)
-            {
-                return null;
-            }
-            else
-            {
-                return Enum.TryParse(typeof(Page), option.SelectedOption, out object page) ? (Page?)page : null;
-            }
+            return Enum.TryParse(typeof(Page), option.SelectedOption, out object page) ? (Page?)page : null;
         }
 
-        static bool ShowButtons()
+        static string ShowButtonDemo()
         {
             var script = new List<IPashuaControl>
             {
@@ -84,7 +76,67 @@ namespace PashuaNetBindings.Demo
 
             script.Run();
 
-            return !cancel.WasClicked;
+            return cancel.WasClicked ? null : string.Empty;
+        }
+
+        static string ShowCheckBoxDemo()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "CheckBox Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+            };
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            var defaultCb = script.AddAndReturn(new CheckBox { Label = "Default option", Default = true });
+            var withTooltip = script.AddAndReturn(new CheckBox { Label = "Has Tooltip", Tooltip = "A tooltip!" });
+            script.Add(new CheckBox { Label = "Disabled", Disabled = true });
+
+            script.Run();
+
+            if (cancel.WasClicked)
+                return null;
+
+            if (defaultCb.WasChecked)
+                return "Default checkbox was selected";
+
+            return "Checkbox with tooltip was selected";
+        }
+
+        static string ShowComboBoxDemo()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "ComboBox Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+            };
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            var noCompletion = script.AddAndReturn(new ComboBox
+            {
+                Label = "No Completion - will be returned",
+                Options = new []{"A","B","C"},
+                Completion = AutoCompletionMode.None,
+                Placeholder = "Placeholder text",
+                Width = 500,
+            });
+            var caseInsensitive = script.AddAndReturn(new ComboBox
+            {
+                Label = "Case-Insensitive Completion",
+                Options = new []{"A","B","C"},
+                Completion = AutoCompletionMode.CaseSensitive,
+                Placeholder = "Placeholder text",
+                Rows = 4,
+            });
+
+            script.Run();
+
+            if (cancel.WasClicked)
+                return null;
+
+            return noCompletion.SelectedOption;
         }
     }
 }
