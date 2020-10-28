@@ -20,6 +20,8 @@ namespace PashuaNetBindings.Demo
                     Page.Buttons => ShowButtonDemo(),
                     Page.CheckBoxes => ShowCheckBoxDemo(),
                     Page.ComboBoxes => ShowComboBoxDemo(),
+                    Page.Dates => ShowDateDemos(),
+                    Page.Images => ShowImageDemos(),
                     _ => null
                 };
             }
@@ -30,6 +32,8 @@ namespace PashuaNetBindings.Demo
             Buttons,
             CheckBoxes,
             ComboBoxes,
+            Dates,
+            Images,
         }
 
         static Page? ShowDemoSelection(string lastOutput)
@@ -98,10 +102,19 @@ namespace PashuaNetBindings.Demo
             if (cancel.WasClicked)
                 return null;
 
-            if (defaultCb.WasChecked)
-                return "Default checkbox was selected";
+            var boxesChecked = new List<string>();
 
-            return "Checkbox with tooltip was selected";
+            if (defaultCb.WasChecked)
+            {
+                boxesChecked.Add("Default");
+            }
+
+            if (withTooltip.WasChecked)
+            {
+                boxesChecked.Add("Tooltip");
+            }
+
+            return "Boxes checked: " + string.Join(", ", boxesChecked);
         }
 
         static string ShowComboBoxDemo()
@@ -117,7 +130,7 @@ namespace PashuaNetBindings.Demo
             var noCompletion = script.AddAndReturn(new ComboBox
             {
                 Label = "No Completion - will be returned",
-                Options = new []{"A","B","C"},
+                Options = new[] { "A", "B", "C" },
                 Completion = AutoCompletionMode.None,
                 Placeholder = "Placeholder text",
                 Width = 500,
@@ -125,9 +138,8 @@ namespace PashuaNetBindings.Demo
             var caseInsensitive = script.AddAndReturn(new ComboBox
             {
                 Label = "Case-Insensitive Completion",
-                Options = new []{"A","B","C"},
+                Options = new[] { "A", "B", "C" },
                 Completion = AutoCompletionMode.CaseSensitive,
-                Placeholder = "Placeholder text",
                 Rows = 4,
             });
 
@@ -137,6 +149,81 @@ namespace PashuaNetBindings.Demo
                 return null;
 
             return noCompletion.SelectedOption;
+        }
+
+        static string ShowDateDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Date Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new Date
+                {
+                    Label = "Date Only",
+                    SelectionMode = DateTimeSelection.DateOnly,
+                    Default = new DateTime(1984,4,4),
+                },
+                new Date
+                {
+                    Label = "Time Only",
+                    SelectionMode = DateTimeSelection.TimeOnly,
+                },
+                new Date
+                {
+                    Label = "Date & Time - Textual",
+                    SelectionMode = DateTimeSelection.BothTimeAndDate,
+                    Textual = true,
+                }
+            };
+            var both = script.AddAndReturn(new Date
+            {
+                Label = "Date & Time - Will be returned",
+                SelectionMode = DateTimeSelection.BothTimeAndDate,
+
+            });
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            if (cancel.WasClicked)
+                return null;
+
+            return both.SelectedTimestamp.ToString("s");
+        }
+
+        static string ShowImageDemos()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window { Title = "Image Demos"},
+                new DefaultButton { Label = "Return to Demo List" },
+                new Image
+                {
+                    Label = "Default Options",
+                    Path = "test.png",
+                },
+                new Image
+                {
+                    Label = "Border & Aspect Adjustment",
+                    Path = "test.png",
+                    Border = true,
+                    Width = 160,
+                    Height = 90,
+                },
+                new Image
+                {
+                    Label = "Max Dimensions",
+                    Path = "test.png",
+                    MaxWidth = 15,
+                    MaxHeight = 9,
+                }
+            };
+            
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : "";
         }
     }
 }
