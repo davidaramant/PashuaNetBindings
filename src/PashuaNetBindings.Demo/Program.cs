@@ -29,6 +29,7 @@ namespace PashuaNetBindings.Demo
                     Page.Text => ShowTextDemos(),
                     Page.TextBox => ShowTextBoxDemos(),
                     Page.TextField => ShowTextFieldDemos(),
+                    Page.Window => ShowWindowDemo(),
                     _ => null
                 };
             }
@@ -48,6 +49,7 @@ namespace PashuaNetBindings.Demo
             Text,
             TextBox,
             TextField,
+            Window,
         }
 
         static Page? ShowDemoSelection(string lastOutput)
@@ -432,6 +434,28 @@ namespace PashuaNetBindings.Demo
             script.Run();
 
             return cancel.WasClicked ? null : realValue.EnteredText;
+        }
+
+        static string ShowWindowDemo()
+        {
+            var script = new List<IPashuaControl>
+            {
+                new Window
+                {
+                    Title = "Window Demo",
+                    Transparency = 0.5,
+                    Floating = true,
+                    AutoCloseTime = TimeSpan.FromSeconds(10),
+                },
+                new Text { Default = "This page will close after 10 seconds" },
+                new DefaultButton { Label = "Return to Demo List" },
+            };
+
+            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
+
+            script.Run();
+
+            return cancel.WasClicked ? null : string.Empty;
         }
     }
 }
