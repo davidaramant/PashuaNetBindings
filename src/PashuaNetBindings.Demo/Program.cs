@@ -443,7 +443,7 @@ namespace PashuaNetBindings.Demo
                 new Window
                 {
                     Title = "Window Demo",
-                    Transparency = 0.5,
+                    Transparency = 0.75,
                     Floating = true,
                     AutoCloseTime = TimeSpan.FromSeconds(10),
                 },
