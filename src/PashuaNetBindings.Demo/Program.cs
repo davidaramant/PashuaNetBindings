@@ -204,18 +204,18 @@ namespace PashuaNetBindings.Demo
                 },
                 new Image
                 {
-                    Label = "Border & Aspect Adjustment",
+                    Label = "Border & Size Adjustment",
                     Path = "test.png",
                     Border = true,
                     Width = 160,
                     Height = 90,
+                    Upscale = true,
                 },
                 new Image
                 {
-                    Label = "Max Dimensions",
+                    Label = "Max Dimensions (bug in Pashua?)",
                     Path = "test.png",
-                    MaxWidth = 15,
-                    MaxHeight = 9,
+                    MaxWidth = 10,
                 }
             };
             
