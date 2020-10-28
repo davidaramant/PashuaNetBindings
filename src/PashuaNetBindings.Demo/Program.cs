@@ -418,6 +418,7 @@ namespace PashuaNetBindings.Demo
                 new TextField
                 {
                     Label = "Disabled",
+                    Default = "Can't change this",
                     Disabled = true,
                 },
             };
