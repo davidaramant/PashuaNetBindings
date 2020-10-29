@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Pashua;
-using Pashua.ScriptExtensions;
 
 namespace PashuaNetBindings.Demo
 {
@@ -77,7 +76,7 @@ namespace PashuaNetBindings.Demo
                 });
             }
 
-            script.Run();
+            script.RunScript();
 
             return Enum.TryParse(typeof(Page), option.SelectedOption, out object page) ? (Page?)page : null;
         }
@@ -95,7 +94,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : string.Empty;
         }
@@ -114,7 +113,7 @@ namespace PashuaNetBindings.Demo
             var withTooltip = script.AddAndReturn(new CheckBox { Label = "Has Tooltip", Tooltip = "A tooltip!" });
             script.Add(new CheckBox { Label = "Disabled", Disabled = true });
 
-            script.Run();
+            script.RunScript();
 
             if (cancel.WasClicked)
                 return null;
@@ -160,7 +159,7 @@ namespace PashuaNetBindings.Demo
                 Rows = 4,
             });
 
-            script.Run();
+            script.RunScript();
 
             if (cancel.WasClicked)
                 return null;
@@ -200,7 +199,7 @@ namespace PashuaNetBindings.Demo
             });
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             if (cancel.WasClicked)
                 return null;
@@ -238,7 +237,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : "";
         }
@@ -268,7 +267,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.SelectedPath;
         }
@@ -297,7 +296,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.EnteredText;
         }
@@ -323,7 +322,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.SelectedOption;
         }
@@ -348,7 +347,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.SelectedPath;
         }
@@ -368,7 +367,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : string.Empty;
         }
@@ -401,7 +400,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.EnteredText;
         }
@@ -431,7 +430,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : realValue.EnteredText;
         }
@@ -453,7 +452,7 @@ namespace PashuaNetBindings.Demo
 
             var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
-            script.Run();
+            script.RunScript();
 
             return cancel.WasClicked ? null : string.Empty;
         }

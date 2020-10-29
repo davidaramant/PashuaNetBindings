@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace Pashua.ScriptExtensions
+namespace Pashua
 {
     /// <summary>
     /// Create and run scripts.
     /// </summary>
-    public static class ScriptExtensions
+    public static class PashuaScriptExtensions
     {
         /// <summary>
         /// Adds the given control to the script and returns it.
@@ -30,24 +29,33 @@ namespace Pashua.ScriptExtensions
         /// <summary>
         /// Runs the specified script.
         /// </summary>
+        /// <remarks>
+        /// If the path to the app is not specified, it will look in the following places for Pashua.app:
+        /// <list type="bullet">
+        /// <item>/Applications/Pashua.app</item>
+        /// <item>~/Applications/Pashua.app</item>
+        /// <item>./Pashua.app</item>
+        /// </list>
+        /// </remarks>
         /// <param name="script">The script to execute.</param>
-        /// <param name="customPashuaPath">(Optional) A custom path to the Pashua executable, if it's not installed in your Applications folder.</param>
+        /// <param name="pashuaAppPath">(Optional) A custom path to Pashua.app.</param>
         /// <exception cref="PashuaScriptException">Thrown if there was an error in the script.</exception>
-        public static void Run(this IEnumerable<IPashuaControl> script, string customPashuaPath = null)
+        /// <exception cref="FileNotFoundException">Thrown if the Pashua executable could not be located.</exception>
+        public static void RunScript(this IEnumerable<IPashuaControl> script, string pashuaAppPath = null)
         {
             // Enumerate the script to avoid any weird issues with lazy sequences
             var scriptCopy = script.ToArray();
 
-            var elementWithResultLookup = 
+            var elementWithResultLookup =
                 scriptCopy
                     .OfType<IHaveResults>()
-                    .ToDictionary(c => c.Id, c=>c);
+                    .ToDictionary(c => c.Id, c => c);
 
             var startInfo = new ProcessStartInfo
             {
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                FileName = GetPashuaPath(customPashuaPath),
+                FileName = PashuaAppFinder.GetExecutablePath(pashuaAppPath),
                 Arguments = "-",
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -63,20 +71,11 @@ namespace Pashua.ScriptExtensions
             process.StandardInput.Close();
             process.WaitForExit();
 
-            foreach(var (id,value) in GetResultValues(process.StandardOutput))
+            foreach (var (id, value) in GetResultValues(process.StandardOutput))
             {
                 elementWithResultLookup[id].SetResult(value);
             }
         }
-
-        private static string GetPashuaPath(string customPashuaPath) => 
-            customPashuaPath ??
-                Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-                    "Pashua.app",
-                    "Contents",
-                    "MacOS",
-                    "Pashua");
 
         private static IEnumerable<(string id, string value)> GetResultValues(StreamReader reader)
         {
@@ -94,9 +93,12 @@ namespace Pashua.ScriptExtensions
         /// <summary>
         /// Writes the script to the given writer.
         /// </summary>
+        /// <remarks>
+        /// Mostly useful for debugging, or if you want to migrate to static Pashua script files.
+        /// </remarks>
         /// <param name="script">The script.</param>
         /// <param name="writer">The output writer.</param>
-        internal static void WriteTo(this IEnumerable<IPashuaControl> script, TextWriter writer)
+        public static void WriteTo(this IEnumerable<IPashuaControl> script, TextWriter writer)
         {
             foreach (var control in script)
             {

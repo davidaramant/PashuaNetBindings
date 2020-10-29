@@ -1,5 +1,4 @@
-﻿using Pashua.ScriptExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Xunit;
 using Xunit.Abstractions;
