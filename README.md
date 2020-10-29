@@ -2,6 +2,8 @@
 
 .NET binding library for [Pashua](https://www.bluem.net/en/projects/pashua/), a macOS tool for displaying dialog boxes.  The use case for this is small utilities where it would be nice to have a GUI but the overhead of using something like Xamarin Mac is not justified.
 
+Only v0.11 of Pashua has been tested (this is the latest version as of writing this).
+
 ## Technology
 
 .NET Standard 2.0, C#
