@@ -16,6 +16,7 @@
     <PackageIcon>pashua_icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/davidaramant/PashuaNetBindings</PackageProjectUrl>
     <PackageReleaseNotes>A changelog is maintained at https://github.com/davidaramant/PashuaNetBindings/CHANGELOG.md</PackageReleaseNotes>
+    <PackageId>DavidAramant.PashuaNetBindings</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
