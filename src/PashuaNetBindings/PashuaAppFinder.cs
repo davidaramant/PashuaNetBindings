@@ -41,11 +41,13 @@ namespace Pashua
 
                     if (!Directory.Exists(appPath))
                     {
-                        appPath = appName;
+                        appPath = Path.Combine(
+                            Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                            appName);
 
                         if (!Directory.Exists(appPath))
                         {
-                            throw new FileNotFoundException($"Could not location {appName}");
+                            throw new FileNotFoundException($"Could not locate {appName}");
                         }
                     }
                 }
