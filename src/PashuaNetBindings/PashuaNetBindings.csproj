@@ -11,7 +11,7 @@
     <Copyright>2020 David Aramant</Copyright>
     <PackageLicenseFile></PackageLicenseFile>
     <RepositoryUrl>https://github.com/davidaramant/PashuaNetBindings</RepositoryUrl>
-    <PackageTags>macOS GUI</PackageTags>
+    <PackageTags>macOS;GUI</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>pashua_icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/davidaramant/PashuaNetBindings</PackageProjectUrl>
