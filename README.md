@@ -10,6 +10,13 @@
 
 MIT
 
+## Table of Contents
+
+* [Usage](#usage)
+* [Examples](#examples)
+* [Source Code Notes](#source-code-notes)
+* [Changelog](CHANGELOG.md)
+
 ## Usage
 
 ### Writing a Script
@@ -52,7 +59,17 @@ Output properties:
 
 ## Examples
 
-See the [Demo project](src/PashuaNetBindings.Demo/Program.cs) for some examples of all the control types.
+See the [Demo project](src/PashuaNetBindings.Demo/Program.cs) for some examples of all the control types.  
+
+The demo can be run with the following command:
+
+`dotnet run --project src/PashuaNetBindings.Demo/PashuaNetBindings.Demo.csproj`
+
+## Source Code Notes
+
+Everything in the library is in one namespace for simplicity, however the controls are as organized in a subfolder.
+
+Most the control classes were created with a code generator project (`src/DataModelGenerator`).  This is just a console app that spits out all the partial `.Generated.cs` files.
 
 ## Changelog
 
