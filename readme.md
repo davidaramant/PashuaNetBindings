@@ -1,6 +1,6 @@
 # Pashua .NET Bindings
 
-.NET Standard wrapper for [Pashua](https://www.bluem.net/en/projects/pashua/), a macOS utility for displaying simple dialog boxes through scripts.  The use case for this is small utilities where it would be nice to have a GUI but the overhead of using something like Xamarin Mac is not justified.
+.NET binding library for [Pashua](https://www.bluem.net/en/projects/pashua/), a macOS tool for displaying dialog boxes.  The use case for this is small utilities where it would be nice to have a GUI but the overhead of using something like Xamarin Mac is not justified.
 
 ## Technology
 
