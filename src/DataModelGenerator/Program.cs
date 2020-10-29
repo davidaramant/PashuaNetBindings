@@ -130,7 +130,7 @@ namespace DataModelGenerator
 
         static void GenerateDataModel(List<Control> controls)
         {
-            string outputPath = Path.Combine("..", "..", "..", "..", "PashuaNetBindings");
+            string outputPath = Path.Combine("..", "..", "..", "..", "PashuaNetBindings", "Controls");
 
             if (!Directory.Exists(outputPath))
             {
