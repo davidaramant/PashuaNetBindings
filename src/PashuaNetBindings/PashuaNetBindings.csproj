@@ -4,6 +4,23 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Pashua</RootNamespace>
     <LangVersion>8.0</LangVersion>
+    <Authors>David Aramant</Authors>
+    <Company />
+    <Product>Pashua .NET Bindings</Product>
+    <Description>.NET binding library for Pashua, a macOS tool for displaying dialog boxes.  The use case for this is small utilities where it would be nice to have a GUI but the overhead of using something like Xamarin Mac is not justified.</Description>
+    <Copyright>2020 David Aramant</Copyright>
+    <PackageLicenseFile></PackageLicenseFile>
+    <RepositoryUrl>https://github.com/davidaramant/PashuaNetBindings</RepositoryUrl>
+    <PackageTags>macOS GUI</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>pashua_icon.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="pashua_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
