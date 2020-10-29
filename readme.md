@@ -39,5 +39,8 @@ See the [Demo project](src/PashuaNetBindings.Demo/Program.cs) for some examples.
 --------------------
 
 TODO:
-* Create NuGet package
+
+* Search for Pashua in recommended locations
 * Finish readme
+* Create NuGet package
+

@@ -14,6 +14,8 @@
     <PackageTags>macOS GUI</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>pashua_icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/davidaramant/PashuaNetBindings</PackageProjectUrl>
+    <PackageReleaseNotes>A changelog is maintained at https://github.com/davidaramant/PashuaNetBindings/CHANGELOG.md</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
