@@ -46,6 +46,12 @@ namespace Pashua
             // Enumerate the script to avoid any weird issues with lazy sequences
             var scriptCopy = script.ToArray();
 
+            var issues = scriptCopy.GetScriptValidationIssues().ToArray();
+            if (issues.Any())
+            {
+                throw new PashuaScriptException(issues);
+            }
+
             var elementWithResultLookup =
                 scriptCopy
                     .OfType<IHaveResults>()
@@ -105,5 +111,13 @@ namespace Pashua
                 control.WriteTo(writer);
             }
         }
+
+        /// <summary>
+        /// Returns all the distinct validation issues that were found with the script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <returns>A sequence of all the validation issues.</returns>
+        public static IEnumerable<string> GetScriptValidationIssues(this IEnumerable<IPashuaControl> script) => 
+            script.SelectMany(control => control.GetValidationIssues()).Distinct();
     }
 }
