@@ -4,6 +4,8 @@
 
 Only v0.11 of Pashua has been tested (this is the latest version as of writing this).
 
+![Build & Test](https://github.com/davidaramant/PashuaNetBindings/workflows/Build%20&%20Test/badge.svg)
+
 ## Technology
 
 .NET Standard 2.0, C#
