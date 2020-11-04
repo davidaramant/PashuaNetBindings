@@ -1,15 +1,14 @@
-﻿namespace Pashua
+﻿using System;
+
+namespace Pashua
 {
     public sealed partial class Password : IHaveResults
     {
         /// <summary>
-        /// The text the user entered. Set after the script is completed.
+        /// Called when the script completes.  The argument will the be the text the user entered (which may be empty).
         /// </summary>
-        public string EnteredText { get; private set; }
+        public Action<string> TextEntered { get; set; }
 
-        void IHaveResults.SetResult(string result)
-        {
-            EnteredText = result;
-        }
+        void IHaveResults.SetResult(string result) => TextEntered?.Invoke(result);
     }
 }

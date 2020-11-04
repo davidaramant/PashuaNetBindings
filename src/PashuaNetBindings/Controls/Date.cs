@@ -12,19 +12,20 @@ namespace Pashua
         public DateTimeSelection SelectionMode { get; set; } = DateTimeSelection.DateOnly;
 
         /// <summary>
-        /// The date and/or time the user selected.
+        /// Called when the script is completed.
         /// </summary>
-        public DateTime SelectedTimestamp { get; private set; }
+        public Action<DateTime> TimestampChosen { get; set; }
 
         void IHaveResults.SetResult(string result)
         {
-            SelectedTimestamp = SelectionMode switch
+            var timestamp = SelectionMode switch
             {
                 DateTimeSelection.DateOnly => DateTime.ParseExact(result, "yyyy-MM-dd", CultureInfo.InvariantCulture),
                 DateTimeSelection.TimeOnly => DateTime.MinValue.Add(DateTime.ParseExact(result, "HH:mm", CultureInfo.InvariantCulture).TimeOfDay),
                 DateTimeSelection.BothTimeAndDate => DateTime.ParseExact(result, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture),
                 _ => throw new InvalidOperationException("Unknown DateTimeSelection mode")
             };
+            TimestampChosen?.Invoke(timestamp);
         }
 
         partial void WriteSpecialProperties(TextWriter writer)

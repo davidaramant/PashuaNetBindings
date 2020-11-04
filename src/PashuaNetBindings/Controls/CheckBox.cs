@@ -1,15 +1,21 @@
-﻿namespace Pashua
+﻿using System;
+
+namespace Pashua
 {
     public sealed partial class CheckBox : IHaveResults
     {
         /// <summary>
-        /// Indicates that the user checked the checkbox. Set after the script is completed.
+        /// Occurs when the script results indicates that the checkbox was clicked.
         /// </summary>
-        public bool WasChecked { get; private set; }
-        
+        public Action Checked { get; set; }
+
         void IHaveResults.SetResult(string result)
         {
-            WasChecked = result == "1";
+            var wasChecked = result == "1";
+            if (wasChecked)
+            {
+                Checked?.Invoke();
+            }
         }
     }
 }

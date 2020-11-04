@@ -27,7 +27,7 @@ MIT
 
 There is one class for every [element type described in the official Pashua documentation](https://www.bluem.net/pashua-docs-latest.html), each of which has properties that correspond to the documented fields.  One notable special case is the `Date` class, which has the two boolean options replaced with a `SelectionMode` enumeration property for whether times/dates/both can be selected.
 
-A "script" for the purposes of this library is just a sequence of `IPashuaControl`. There is a helper extension method for `ICollection<IPashuaControl>` called `AddAndReturn` that, well, adds the given control to the script and returns a reference to it.  This is useful due to [how script output is handled](#reading-the-script-output).
+A "script" for the purposes of this library is just an `IEnumerable<IPashuaControl>`. 
 
 ### Running a Script
 
@@ -47,23 +47,25 @@ However, the `RunScript` method takes an optional parameter for a custom locatio
 
 The name of the element in the Pashua script is handled automatically.  You _can_ get access to it with the `Id` property, but there shouldn't be a reason to use it in normal use.
 
-Once the script has been executed, any control type that returns a value will have a property set with the result.  This does mean that you will need to keep track of each control instance you want to capture output from.
+Each control type that has output also has a property of an appropriate `Action` type (for example, `Action` for `Button.Clicked` or `Action<DateTime>` for `Date.TimestampChosen`) that will be called when the Pashua output is parsed.
 
-Output properties:
+For controls like `Button` or `CheckBox` where the user might not interact with it, the action will simply not be called if the user doesn't click that control.  All other controls will pass along _something_ even if it's just an empty string.
 
-* `Button.WasClicked`
-* `CancelButton.WasClicked`
-* `CheckBox.WasChecked`
-* `ComboBox.SelectedOption`
-* `Date.SelectedTimestamp`
-* `DefaultButton.WasClicked`
-* `OpenBrowser.SelectedPath`
-* `Password.EnteredText`
-* `Popup.SelectedOption`
-* `RadioButton.SelectedOption`
-* `SaveBrowser.SelectedPath`
-* `TextBox.EnteredText`
-* `TextField.EnteredText`
+Action properties:
+
+* `Button.Clicked`
+* `CancelButton.Clicked`
+* `CheckBox.Checked`
+* `ComboBox.OptionSelected`
+* `Date.TimestampChosen`
+* `DefaultButton.Clicked`
+* `OpenBrowser.PathSelected`
+* `Password.TextEntered`
+* `Popup.OptionSelected`
+* `RadioButton.OptionSelected`
+* `SaveBrowser.PathSelected`
+* `TextBox.TextEntered`
+* `TextField.TextEntered`
 
 ### Other Functionality
 
@@ -83,7 +85,7 @@ var allIssues = script.GetScriptValidationIssues();
 
 ## Examples
 
-See the [Demo project](src/PashuaNetBindings.Demo/Program.cs) for some examples of all the control types.  
+See the [Demo project](src/PashuaNetBindings.Demo/Program.cs) for examples of all the control types.  
 
 The demo can be run with the following command:
 
@@ -92,6 +94,8 @@ The demo can be run with the following command:
 ### Minimal Example
 
 ```csharp
+string thoughts = null;
+
 var script = new List<IPashuaControl>
 {
     new Window
@@ -102,14 +106,16 @@ var script = new List<IPashuaControl>
     {
         Default = "A simple GUI without having to deal with Xamarin.Mac"
     },
+    new TextField 
+    { 
+        Label = "Your thoughts:",
+        TextEntered = t => thoughts = t,
+    },
     new DefaultButton
     {
         Label = "Submit"
     }
 };
-
-var thoughts = script.AddAndReturn(
-    new TextField { Label = "Your thoughts:" });
 
 script.RunScript();
 
@@ -126,11 +132,3 @@ Most the control classes were created with a code generator project (`src/DataMo
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
-
---------------------
-
-TODO before release:
-
-* Test the application finding thing
-* Create NuGet package
-

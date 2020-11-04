@@ -8,9 +8,11 @@ namespace Pashua.Tests
         [Fact]
         public void ShouldReplaceReturnTokenWithNewline()
         {
-            var textBox = new TextBox();
+            string result = null;
+
+            var textBox = new TextBox { TextEntered = t => result = t, };
             ((IHaveResults)textBox).SetResult("One[return]Two[return]Three");
-            textBox.EnteredText.Should().Be("One\nTwo\nThree");
+            result.Should().Be("One\nTwo\nThree");
         }
     }
 }

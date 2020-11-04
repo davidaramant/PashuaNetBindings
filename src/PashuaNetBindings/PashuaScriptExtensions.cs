@@ -11,22 +11,6 @@ namespace Pashua
     public static class PashuaScriptExtensions
     {
         /// <summary>
-        /// Adds the given control to the script and returns it.
-        /// </summary>
-        /// <remarks>
-        /// Useful convenience since references to controls that return output need to be kept around.
-        /// </remarks>
-        /// <typeparam name="T">The type of control being added.</typeparam>
-        /// <param name="script">The script.</param>
-        /// <param name="control">The control being added.</param>
-        /// <returns>The control.</returns>
-        public static T AddAndReturn<T>(this ICollection<IPashuaControl> script, T control) where T : IPashuaControl
-        {
-            script.Add(control);
-            return control;
-        }
-
-        /// <summary>
         /// Runs the specified script.
         /// </summary>
         /// <remarks>

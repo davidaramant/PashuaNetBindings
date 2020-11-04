@@ -1,15 +1,21 @@
-﻿namespace Pashua
+﻿using System;
+
+namespace Pashua
 {
     public sealed partial class CancelButton : IHaveResults
     {
         /// <summary>
-        /// Indicates that the user clicked the button. Set after the script is completed.
+        /// Occurs when the script results indicates that the button was clicked.
         /// </summary>
-        public bool WasClicked { get; private set; }
-        
+        public Action Clicked { get; set; }
+
         void IHaveResults.SetResult(string result)
         {
-            WasClicked = result == "1";
+            var wasClicked = result == "1";
+            if (wasClicked)
+            {
+                Clicked?.Invoke();
+            }
         }
     }
 }

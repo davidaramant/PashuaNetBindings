@@ -19,14 +19,11 @@ namespace Pashua
         }
 
         /// <summary>
-        /// The text the user entered with any returns turned into newlines. Set after the script is completed.
+        /// Called when the script completes.  The argument will the be the text the user entered (which may be empty), with any returns turned into newlines.
         /// </summary>
-        public string EnteredText { get; private set; }
+        public Action<string> TextEntered { get; set; }
 
-        void IHaveResults.SetResult(string result)
-        {
-            EnteredText = result.Replace("[return]","\n");
-        }
+        void IHaveResults.SetResult(string result) => TextEntered?.Invoke(result.Replace("[return]","\n"));
 
         private static string SerializeEnum(FontSize size) => size.ToString().ToLowerInvariant();
 

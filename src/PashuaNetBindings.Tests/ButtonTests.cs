@@ -17,11 +17,12 @@ namespace Pashua.Tests
         [Theory]
         [InlineData("0", false)]
         [InlineData("1", true)]
-        public void ShouldSetWasClickedBasedOnResult(string rawResult, bool expectedResult)
+        public void ShouldCallClickedBasedOnResult(string rawResult, bool expectedResult)
         {
-            var button = new Button { Label = "button" };
+            bool calledClicked = false;
+            var button = new Button { Label = "button", Clicked = () => calledClicked = true, };
             ((IHaveResults)button).SetResult(rawResult);
-            button.WasClicked.Should().Be(expectedResult);
+            calledClicked.Should().Be(expectedResult);
         }
     }
 }

@@ -1,15 +1,14 @@
-﻿namespace Pashua
+﻿using System;
+
+namespace Pashua
 {
     public sealed partial class SaveBrowser : IHaveResults
     {
         /// <summary>
-        /// The path the user selected. Set after the script is completed.
+        /// Called when the script has completed.  The argument is the path the user chose (may be empty).
         /// </summary>
-        public string SelectedPath { get; private set; }
+        public Action<string> PathSelected { get; set; }
 
-        void IHaveResults.SetResult(string result)
-        {
-            SelectedPath = result;
-        }
+        void IHaveResults.SetResult(string result) => PathSelected?.Invoke(result);
     }
 }

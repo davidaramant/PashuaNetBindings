@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Pashua;
 
 namespace PashuaNetBindings.Demo
@@ -53,19 +54,28 @@ namespace PashuaNetBindings.Demo
 
         static Page? ShowDemoSelection(string lastOutput)
         {
+            Page? selectedPage = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Control Demos" },
-                new Text { Default = "This page also serves as the RadioButton demo" }
-            };
-            var option = script.AddAndReturn(
+                new Text { Default = "This page also serves as the RadioButton demo" },
+                new CancelButton { Label = "Quit" },
+                new DefaultButton { Label = "Show Selected Page" },
                 new RadioButton
                 {
                     Label = "Select demo page to view:",
                     Options = Enum.GetNames(typeof(Page)),
-                });
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
-            script.Add(new DefaultButton { Label = "Show Selected Page" });
+                    OptionSelected = p =>
+                    {
+                        if (Enum.TryParse<Page>(p, out var page))
+                        {
+                            selectedPage = page;
+                        }
+                    },
+                }
+            };
+
 
             if (!string.IsNullOrWhiteSpace(lastOutput))
             {
@@ -78,11 +88,13 @@ namespace PashuaNetBindings.Demo
 
             script.RunScript();
 
-            return Enum.TryParse(typeof(Page), option.SelectedOption, out object page) ? (Page?)page : null;
+            return selectedPage;
         }
 
         static string ShowButtonDemo()
         {
+            bool canceled = false;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Button Demos"},
@@ -90,85 +102,83 @@ namespace PashuaNetBindings.Demo
                 new Button { Label = "Has Tooltip", Tooltip = "Multiline\nTooltip"},
                 new Button { Label ="Disabled", Disabled = true},
                 new DefaultButton { Label = "Return to Demo List" },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true,}
             };
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : string.Empty;
+            return canceled ? null : string.Empty;
         }
 
         static string ShowCheckBoxDemo()
         {
+            bool cancelClicked = false;
+            var boxesChecked = new List<string>();
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "CheckBox Demos"},
                 new DefaultButton { Label = "Return to Demo List" },
+                new CancelButton { Label = "Quit", Clicked = ()=>cancelClicked = true},
+                new CheckBox
+                {
+                    Label = "Default option",
+                    Default = true,
+                    Checked = () => boxesChecked.Add("Default"),
+                },
+                new CheckBox
+                {
+                    Label = "Has Tooltip",
+                    Tooltip = "A tooltip!",
+                    Checked = () => boxesChecked.Add("Tooltip"),
+                },
+                new CheckBox { Label = "Disabled", Disabled = true }
             };
 
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
-
-            var defaultCb = script.AddAndReturn(new CheckBox { Label = "Default option", Default = true });
-            var withTooltip = script.AddAndReturn(new CheckBox { Label = "Has Tooltip", Tooltip = "A tooltip!" });
-            script.Add(new CheckBox { Label = "Disabled", Disabled = true });
 
             script.RunScript();
 
-            if (cancel.WasClicked)
-                return null;
-
-            var boxesChecked = new List<string>();
-
-            if (defaultCb.WasChecked)
-            {
-                boxesChecked.Add("Default");
-            }
-
-            if (withTooltip.WasChecked)
-            {
-                boxesChecked.Add("Tooltip");
-            }
-
-            return "Boxes checked: " + string.Join(", ", boxesChecked);
+            return cancelClicked ? null : "Boxes checked: " + string.Join(", ", boxesChecked);
         }
 
         static string ShowComboBoxDemo()
         {
+            bool canceled = false;
+            string selectedOption = "";
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "ComboBox Demos"},
                 new DefaultButton { Label = "Return to Demo List" },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
+                new ComboBox
+                {
+                    Label = "No Completion - will be returned",
+                    Options = new[] { "A", "B", "C" },
+                    Completion = AutoCompletionMode.None,
+                    Placeholder = "Placeholder text",
+                    Width = 500,
+                    OptionSelected = o => selectedOption = o,
+                },
+                new ComboBox
+                {
+                    Label = "Case-Insensitive Completion",
+                    Options = new[] { "A", "B", "C" },
+                    Completion = AutoCompletionMode.CaseSensitive,
+                    Rows = 4,
+                },
             };
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
-
-            var noCompletion = script.AddAndReturn(new ComboBox
-            {
-                Label = "No Completion - will be returned",
-                Options = new[] { "A", "B", "C" },
-                Completion = AutoCompletionMode.None,
-                Placeholder = "Placeholder text",
-                Width = 500,
-            });
-            var caseInsensitive = script.AddAndReturn(new ComboBox
-            {
-                Label = "Case-Insensitive Completion",
-                Options = new[] { "A", "B", "C" },
-                Completion = AutoCompletionMode.CaseSensitive,
-                Rows = 4,
-            });
 
             script.RunScript();
 
-            if (cancel.WasClicked)
-                return null;
-
-            return noCompletion.SelectedOption;
+            return canceled ? null : selectedOption;
         }
 
         static string ShowDateDemos()
         {
+            bool canceled = false;
+            DateTime chosenTimestamp = new DateTime();
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Date Demos"},
@@ -189,26 +199,30 @@ namespace PashuaNetBindings.Demo
                     Label = "Date & Time - Textual",
                     SelectionMode = DateTimeSelection.BothTimeAndDate,
                     Textual = true,
-                }
+                },
+                new Date
+                {
+                    Label = "Date & Time - Will be returned",
+                    SelectionMode = DateTimeSelection.BothTimeAndDate,
+                    TimestampChosen = dt => chosenTimestamp = dt,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var both = script.AddAndReturn(new Date
-            {
-                Label = "Date & Time - Will be returned",
-                SelectionMode = DateTimeSelection.BothTimeAndDate,
-
-            });
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            if (cancel.WasClicked)
-                return null;
-
-            return both.SelectedTimestamp.ToString("s");
+            return canceled ? null : chosenTimestamp.ToString("s");
         }
 
         static string ShowImageDemos()
         {
+            var imgPath = 
+                Path.Combine(
+                    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                    "test.png");
+
+            bool canceled = false;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Image Demos"},
@@ -216,12 +230,12 @@ namespace PashuaNetBindings.Demo
                 new Image
                 {
                     Label = "Default Options",
-                    Path = "test.png",
+                    Path = imgPath,
                 },
                 new Image
                 {
                     Label = "Border & Size Adjustment",
-                    Path = "test.png",
+                    Path = imgPath,
                     Border = true,
                     Width = 160,
                     Height = 90,
@@ -230,20 +244,22 @@ namespace PashuaNetBindings.Demo
                 new Image
                 {
                     Label = "Max Dimensions (bug in Pashua?)",
-                    Path = "test.png",
+                    Path = imgPath,
                     MaxWidth = 10,
-                }
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : "";
+            return canceled ? null : "";
         }
 
         static string ShowOpenBrowserDemos()
         {
+            bool canceled = false;
+            string selectedPath = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "OpenBrowser Demos"},
@@ -259,21 +275,24 @@ namespace PashuaNetBindings.Demo
                     Label = "Directories",
                     FileTypes = new []{"directory"},
                 },
+                new OpenBrowser
+                {
+                    Label = "Will be returned",
+                    PathSelected = p => selectedPath = p,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new OpenBrowser
-            {
-                Label = "Will be returned",
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.SelectedPath;
+            return canceled ? null : selectedPath;
         }
 
         static string ShowPasswordDemos()
         {
+            bool canceled = false;
+            string password = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Password Demos"},
@@ -288,21 +307,24 @@ namespace PashuaNetBindings.Demo
                     Label = "Disabled",
                     Disabled = true,
                 },
+                new Password
+                {
+                    Label = "Will be returned",
+                    TextEntered = p=>password = p,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new Password
-            {
-                Label = "Will be returned",
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.EnteredText;
+            return canceled ? null : password;
         }
 
         static string ShowPopupDemos()
         {
+            bool canceled = false;
+            string selectedOption = "";
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Popup Demos"},
@@ -313,22 +335,25 @@ namespace PashuaNetBindings.Demo
                     Default = "A",
                     Options = new []{"A","B","C"}
                 },
+                new Popup
+                {
+                    Label = "Will be returned",
+                    Options = new[] { "A", "B", "C" },
+                    OptionSelected = o => selectedOption = o,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new Popup
-            {
-                Label = "Will be returned",
-                Options = new[] { "A", "B", "C" }
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.SelectedOption;
+            return canceled ? null : selectedOption;
         }
 
         static string ShowSaveBrowserDemos()
         {
+            bool canceled = false;
+            string selectedPath = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "SaveBrowser Demos"},
@@ -339,21 +364,23 @@ namespace PashuaNetBindings.Demo
                     Default = "test.png",
                     Filetype = "png"
                 },
+                new SaveBrowser
+                {
+                    Label = "Will be returned",
+                    PathSelected = p => selectedPath = p,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new SaveBrowser
-            {
-                Label = "Will be returned",
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.SelectedPath;
+            return canceled ? null : selectedPath;
         }
 
         static string ShowTextDemos()
         {
+            bool canceled = false;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "Text Demos"},
@@ -363,17 +390,19 @@ namespace PashuaNetBindings.Demo
                     Label = "This is a label, which is different than the main text",
                     Default = "The text\ncan\nhave\nnewlines",
                 },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : string.Empty;
+            return canceled ? null : string.Empty;
         }
 
         static string ShowTextBoxDemos()
         {
+            bool canceled = false;
+            string text = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "TextBox Demos"},
@@ -392,21 +421,24 @@ namespace PashuaNetBindings.Demo
                     Disabled = true,
                     Default = "Here is some text to see how it looks",
                 },
+                new TextBox
+                {
+                    Label = "Will be returned",
+                    TextEntered = t => text = t,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new TextBox
-            {
-                Label = "Will be returned",
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.EnteredText;
+            return canceled ? null : text;
         }
 
         static string ShowTextFieldDemos()
         {
+            bool canceled = false;
+            string text = null;
+
             var script = new List<IPashuaControl>
             {
                 new Window { Title = "TextField Demos"},
@@ -422,39 +454,40 @@ namespace PashuaNetBindings.Demo
                     Default = "Can't change this",
                     Disabled = true,
                 },
+                new TextField
+                {
+                    Label = "Will be returned",
+                    TextEntered = t => text = t,
+                },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-            var realValue = script.AddAndReturn(new TextField
-            {
-                Label = "Will be returned",
-            });
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : realValue.EnteredText;
+            return canceled ? null : text;
         }
 
         static string ShowWindowDemo()
         {
+            bool canceled = false;
+
             var script = new List<IPashuaControl>
             {
                 new Window
                 {
                     Title = "Window Demo",
-                    Transparency = 0.75,
+                    Transparency = 0.85,
                     Floating = true,
                     AutoCloseTime = TimeSpan.FromSeconds(10),
                 },
                 new Text { Default = "This page will close after 10 seconds" },
                 new DefaultButton { Label = "Return to Demo List" },
+                new CancelButton { Label = "Quit", Clicked = () => canceled = true },
             };
-
-            var cancel = script.AddAndReturn(new CancelButton { Label = "Quit" });
 
             script.RunScript();
 
-            return cancel.WasClicked ? null : string.Empty;
+            return canceled ? null : string.Empty;
         }
     }
 }

@@ -1,17 +1,16 @@
-﻿namespace Pashua
+﻿using System;
+
+namespace Pashua
 {
     public sealed partial class ComboBox : IHaveResults
     {
         private static string SerializeEnum(AutoCompletionMode mode) => ((int) mode).ToString();
 
         /// <summary>
-        /// The option the user selected. Set after the script is completed.
+        /// Called when the script has completed.  The argument is the option chosen by the user.
         /// </summary>
-        public string SelectedOption { get; private set; }
-        
-        void IHaveResults.SetResult(string result)
-        {
-            SelectedOption = result;
-        }
+        public Action<string> OptionSelected { get; set; }
+
+        void IHaveResults.SetResult(string result) => OptionSelected?.Invoke(result);
     }
 }

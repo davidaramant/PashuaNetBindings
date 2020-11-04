@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -18,14 +19,11 @@ namespace Pashua
         public IEnumerable<string> FileTypes { get; set; }
         
         /// <summary>
-        /// The path the user selected. Set after the script is completed.
+        /// Called when the script has completed.  The argument is the path the user chose (may be empty).
         /// </summary>
-        public string SelectedPath { get; private set; }
-        
-        void IHaveResults.SetResult(string result)
-        {
-            SelectedPath = result;
-        }
+        public Action<string> PathSelected { get; set; }
+
+        void IHaveResults.SetResult(string result) => PathSelected?.Invoke(result);
 
         private bool IsFileTypesSpecified => FileTypes?.Any() ?? false;
 
